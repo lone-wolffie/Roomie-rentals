@@ -1,78 +1,200 @@
-const listings = [
-  {
-    title: "Bedsitter in Nairobi",
-    region: "Nairobi",
-    price: 8000,
-    size: "bedsitter",
-    image: "assets/images/house1.jpg"
-  },
-  {
-    title: "1 Bedroom in Mombasa",
-    region: "Mombasa",
-    price: 12000,
-    size: "1bedroom",
-    image: "assets/images/house2.jpg"
-  },
-  {
-    title: "2 Bedroom in Kisumu",
-    region: "Kisumu",
-    price: 15000,
-    size: "2bedroom",
-    image: "assets/images/house3.jpg"
-  }
-];
+// === GLOBAL STATE ===
+let filteredListings = [...LISTINGS];
 
+// === ELEMENTS ===
+const listingsGrid = document.getElementById("listingsGrid");
+const resultsCount = document.getElementById("resultsCount");
+const totalListings = document.getElementById("totalListings");
+
+const searchBtn = document.getElementById("searchBtn");
+const searchRegion = document.getElementById("searchRegion");
+const searchType = document.getElementById("searchType");
+const searchPrice = document.getElementById("searchPrice");
+
+const sortBy = document.getElementById("sortBy");
+
+const gridBtn = document.getElementById("gridViewBtn");
+const listBtn = document.getElementById("listViewBtn");
+
+const regionsGrid = document.getElementById("regionsGrid");
+
+// Modal
+const modalOverlay = document.getElementById("modalOverlay");
+const modalBody = document.getElementById("modalBody");
+const modalGallery = document.getElementById("modalGallery");
+const modalClose = document.getElementById("modalClose");
+
+// === INIT ===
+function init() {
+  displayListings(LISTINGS);
+  renderRegions();
+  totalListings.textContent = LISTINGS.length;
+}
+
+window.onload = init;
+
+// === DISPLAY LISTINGS ===
 function displayListings(data) {
-  const container = document.getElementById("listings");
-  container.innerHTML = "";
+  listingsGrid.innerHTML = "";
 
-  data.forEach(house => {
-    container.innerHTML += `
-      <div class="card">
-        <img src="${house.image}" alt="house">
-        <div class="card-content">
-          <h3>${house.title}</h3>
-          <p>${house.region}</p>
-          <p class="price">KES ${house.price}</p>
-          <p>${house.size}</p>
+  if (data.length === 0) {
+    document.getElementById("emptyState").style.display = "block";
+    return;
+  } else {
+    document.getElementById("emptyState").style.display = "none";
+  }
+
+  resultsCount.textContent = `Showing ${data.length} listing(s)`;
+
+  data.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "property-card";
+
+    card.innerHTML = `
+      <div class="card-image">
+        <img src="${item.photos[0]}" alt="${item.title}">
+        <div class="card-badge ${item.verified ? "verified" : ""}">
+          ${item.verified ? "Verified" : "Standard"}
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="card-region">${item.region}</div>
+        <div class="card-title">${item.title}</div>
+
+        <div class="card-meta">
+          <span>🛏 ${item.bedrooms}</span>
+          <span>🛁 ${item.bathrooms}</span>
+          <span>📐 ${item.size} sqm</span>
+        </div>
+
+        <div class="card-footer">
+          <div class="card-price">KES ${item.price}</div>
+          <button class="card-contact">View</button>
         </div>
       </div>
     `;
+
+    card.addEventListener("click", () => openModal(item));
+    listingsGrid.appendChild(card);
   });
 }
 
-function filterListings() {
-  const search = document.getElementById("search").value.toLowerCase();
-  const region = document.getElementById("region").value;
-  const price = document.getElementById("price").value;
-  const size = document.getElementById("size").value;
+// === SEARCH ===
+searchBtn.addEventListener("click", () => {
+  const region = searchRegion.value;
+  const type = searchType.value;
+  const price = searchPrice.value;
 
-  let filtered = listings.filter(house => {
+  filteredListings = LISTINGS.filter(item => {
     return (
-      (search === "" || house.title.toLowerCase().includes(search)) &&
-      (region === "" || house.region === region) &&
-      (price === "" || house.price <= price) &&
-      (size === "" || house.size === size)
+      (region === "" || item.region === region) &&
+      (type === "" || item.type === type) &&
+      (price === "" || item.price <= price)
     );
   });
 
-  displayListings(filtered);
+  displayListings(filteredListings);
+});
+
+// === SORT ===
+sortBy.addEventListener("change", () => {
+  let sorted = [...filteredListings];
+
+  switch (sortBy.value) {
+    case "price-asc":
+      sorted.sort((a, b) => a.price - b.price);
+      break;
+    case "price-desc":
+      sorted.sort((a, b) => b.price - a.price);
+      break;
+    case "size-asc":
+      sorted.sort((a, b) => a.size - b.size);
+      break;
+    default:
+      sorted.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+  }
+
+  displayListings(sorted);
+});
+
+// === VIEW TOGGLE ===
+gridBtn.addEventListener("click", () => {
+  listingsGrid.classList.remove("list-view");
+  gridBtn.classList.add("active");
+  listBtn.classList.remove("active");
+});
+
+listBtn.addEventListener("click", () => {
+  listingsGrid.classList.add("list-view");
+  listBtn.classList.add("active");
+  gridBtn.classList.remove("active");
+});
+
+// === REGIONS ===
+function renderRegions() {
+  regionsGrid.innerHTML = "";
+
+  REGIONS.forEach(region => {
+    const count = LISTINGS.filter(l => l.region === region.name).length;
+
+    const card = document.createElement("div");
+    card.className = "region-card";
+
+    card.innerHTML = `
+      <div class="region-emoji">${region.emoji}</div>
+      <div class="region-name">${region.name}</div>
+      <div class="region-count">${count} listings</div>
+    `;
+
+    card.addEventListener("click", () => {
+      searchRegion.value = region.name;
+      searchBtn.click();
+      window.scrollTo({ top: 500, behavior: "smooth" });
+    });
+
+    regionsGrid.appendChild(card);
+  });
 }
 
-// Validate image quality before upload
-function validateImage(file) {
-  const minWidth = 800;
-  const minHeight = 600;
+// === MODAL ===
+function openModal(item) {
+  modalOverlay.classList.add("open");
 
-  const img = new Image();
-  img.src = URL.createObjectURL(file);
+  modalGallery.innerHTML = `
+    <img src="${item.photos[0]}" alt="">
+  `;
 
-  img.onload = () => {
-    if (img.width < minWidth || img.height < minHeight) {
-      alert("Image quality too low. Use a better camera.");
-    }
-  };
+  modalBody.innerHTML = `
+    <h2 class="modal-title">${item.title}</h2>
+    <p class="modal-region">${item.region}, ${item.neighbourhood}</p>
+    <div class="modal-price">KES ${item.price}</div>
+
+    <div class="modal-grid">
+      <div class="modal-stat"><strong>${item.bedrooms}</strong><span>Bedrooms</span></div>
+      <div class="modal-stat"><strong>${item.bathrooms}</strong><span>Bathrooms</span></div>
+      <div class="modal-stat"><strong>${item.size} sqm</strong><span>Size</span></div>
+    </div>
+
+    <p class="modal-desc">${item.description}</p>
+
+    <div class="modal-amenities">
+      ${item.amenities.map(a => `<span class="amenity-tag">${a}</span>`).join("")}
+    </div>
+
+    <div class="modal-contact">
+      <button class="btn-primary">Call ${item.phone}</button>
+    </div>
+  `;
 }
 
-// Load all 
-displayListings(listings);
+// CLOSE MODAL
+modalClose.addEventListener("click", () => {
+  modalOverlay.classList.remove("open");
+});
+
+modalOverlay.addEventListener("click", (e) => {
+  if (e.target === modalOverlay) {
+    modalOverlay.classList.remove("open");
+  }
+});

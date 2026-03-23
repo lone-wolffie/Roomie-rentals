@@ -1,46 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Roomie Rentals</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roomie Rentals — Find your perfect home in Kenya</title>
+    <!--link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" -->
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<header>
-  <h1>Kenya Rentals</h1>
-  <p>Find affordable housing across Kenya</p>
-</header>
+  <!-- navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-icon">🏠</span>
+        <span class="logo-text">Affordable houses <em>Kenya</em></span>
+      </a>
+      <div class="nav-links">
+        <a href="#listings">Browse</a>
+        <a href="#regions">Regions</a>
+        <a href="#about">About</a>
+        <a href="admin.html" class="btn-admin">Admin Panel</a>
+      </div>
+      <button class="hamburger" id="hamburger">☰</button>
+    </div>
+  </nav>
 
-<section class="filters">
-  <input type="text" id="search" placeholder="Search location...">
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-bg">
+      <div class="hero-shape s1"></div>
+      <div class="hero-shape s2"></div>
+      <div class="hero-shape s3"></div>
+    </div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">🇰🇪 Kenya's Trusted Rental Platform</p>
+      <h1 class="hero-title">Find Your<br/><em>Perfect Home</em><br/>in Kenya</h1>
+      <p class="hero-sub">Verified listings across Nairobi, Mombasa, Kisumu & beyond.<br/>No agent fees. No middlemen.</p>
 
-  <select id="region">
-    <option value="">All Regions</option>
-    <option value="Nairobi">Nairobi</option>
-    <option value="Mombasa">Mombasa</option>
-    <option value="Kisumu">Kisumu</option>
-  </select>
+      <!-- SEARCH BAR -->
+      <div class="search-card">
+        <div class="search-row">
+          <div class="search-field">
+            <label>📍 Region</label>
+            <select id="searchRegion">
+              <option value="">All Regions</option>
+              <option>Nairobi</option>
+              <option>Mombasa</option>
+              <option>Kisumu</option>
+              <option>Nakuru</option>
+              <option>Eldoret</option>
+              <option>Thika</option>
+              <option>Nyeri</option>
+              <option>Malindi</option>
+            </select>
+          </div>
+          <div class="search-field">
+            <label>🏡 Type</label>
+            <select id="searchType">
+              <option value="">Any Type</option>
+              <option>Bedsitter</option>
+              <option>1 Bedroom</option>
+              <option>2 Bedrooms</option>
+              <option>3 Bedrooms</option>
+              <option>4+ Bedrooms</option>
+              <option>Studio</option>
+              <option>Maisonette</option>
+            </select>
+          </div>
+          <div class="search-field">
+            <label>💰 Max Rent (KES)</label>
+            <select id="searchPrice">
+              <option value="">Any Budget</option>
+              <option value="5000">Under 5,000</option>
+              <option value="10000">Under 10,000</option>
+              <option value="20000">Under 20,000</option>
+              <option value="40000">Under 40,000</option>
+              <option value="80000">Under 80,000</option>
+              <option value="150000">Under 150,000</option>
+            </select>
+          </div>
+          <button class="search-btn" id="searchBtn">Search</button>
+        </div>
+      </div>
 
-  <select id="price">
-    <option value="">Max Price</option>
-    <option value="5000">5,000</option>
-    <option value="10000">10,000</option>
-    <option value="20000">20,000</option>
-  </select>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num" id="totalListings">0</span><span>Listings</span></div>
+        <div class="stat"><span class="stat-num">8</span><span>Regions</span></div>
+        <div class="stat"><span class="stat-num">100%</span><span>Verified</span></div>
+      </div>
+    </div>
+  </header>
 
-  <select id="size">
-    <option value="">House Size</option>
-    <option value="bedsitter">Bedsitter</option>
-    <option value="1bedroom">1 Bedroom</option>
-    <option value="2bedroom">2 Bedroom</option>
-  </select>
+  <!-- FILTERS BAR -->
+  <section class="filter-bar" id="listings">
+    <div class="filter-inner">
+      <div class="filter-left">
+        <span class="results-count" id="resultsCount">Showing all listings</span>
+      </div>
+      <div class="filter-right">
+        <label>Sort by:</label>
+        <select id="sortBy">
+          <option value="newest">Newest First</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="size-asc">Size: Small to Large</option>
+        </select>
+        <div class="view-toggle">
+          <button class="view-btn active" id="gridViewBtn" title="Grid view">⊞</button>
+          <button class="view-btn" id="listViewBtn" title="List view">☰</button>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <button onclick="filterListings()">Search</button>
-</section>
+  <!-- ACTIVE FILTERS -->
+  <div class="active-filters" id="activeFilters"></div>
 
-<section id="listings" class="listings"></section>
+  <!-- LISTINGS GRID -->
+  <main class="listings-section">
+    <div class="listings-grid" id="listingsGrid">
+      <!-- Cards injected by JS -->
+    </div>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div class="empty-icon">🏚️</div>
+      <h3>No listings found</h3>
+      <p>Try adjusting your filters or check back later.</p>
+      <button onclick="clearFilters()">Clear Filters</button>
+    </div>
+  </main>
 
-<script src="script.js"></script>
+  <!-- REGIONS SECTION -->
+  <section class="regions-section" id="regions">
+    <div class="section-header">
+      <p class="section-tag">Browse by Location</p>
+      <h2>Popular Regions</h2>
+    </div>
+    <div class="regions-grid" id="regionsGrid">
+      <!-- Injected by JS -->
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about-section" id="about">
+    <div class="about-inner">
+      <div class="about-text">
+        <p class="section-tag">Why NyumbaKE?</p>
+        <h2>Built for Kenya.<br/>Built for You.</h2>
+        <p>NyumbaKE is designed from the ground up to serve Kenyan renters and landlords. No cluttered listings, no fake photos, no ghost landlords. Every listing goes through our admin verification before it goes live.</p>
+        <div class="about-features">
+          <div class="feature">
+            <span class="feature-icon">✅</span>
+            <div>
+              <strong>Verified Listings</strong>
+              <p>Every property is manually reviewed before publishing.</p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">📸</span>
+            <div>
+              <strong>Quality Photos</strong>
+              <p>We enforce minimum photo quality standards — no blurry Itel shots.</p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">🔒</span>
+            <div>
+              <strong>Secure & Private</strong>
+              <p>Your contact info is protected until you decide to connect.</p>
+            </div>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">📍</span>
+            <div>
+              <strong>Kenya-First</strong>
+              <p>Built for Kenyan counties, neighborhoods, and budgets.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="about-card-stack">
+          <div class="acard ac1">
+            <div class="acard-icon">🏙️</div>
+            <strong>Nairobi</strong>
+            <span>Central Business District</span>
+          </div>
+          <div class="acard ac2">
+            <div class="acard-icon">🌊</div>
+            <strong>Mombasa</strong>
+            <span>Coastal Lifestyle</span>
+          </div>
+          <div class="acard ac3">
+            <div class="acard-icon">🌳</div>
+            <strong>Kisumu</strong>
+            <span>Lakeside Living</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-text">Nyumba<em>KE</em></span>
+        <p>Kenya's trusted home rental platform. Find verified rentals across all counties.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Platform</h4>
+        <a href="#">Browse Listings</a>
+        <a href="#">Post a Property</a>
+        <a href="admin.html">Admin Login</a>
+      </div>
+      <div class="footer-links">
+        <h4>Regions</h4>
+        <a href="#">Nairobi</a>
+        <a href="#">Mombasa</a>
+        <a href="#">Kisumu</a>
+        <a href="#">Nakuru</a>
+      </div>
+      <div class="footer-links">
+        <h4>Support</h4>
+        <a href="#">Help Center</a>
+        <a href="#">Report a Listing</a>
+        <a href="#">Contact Us</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 NyumbaKE. Made with ❤️ in Kenya.</p>
+    </div>
+  </footer>
+
+  <!-- LISTING MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-gallery" id="modalGallery"></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
