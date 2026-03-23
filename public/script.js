@@ -183,6 +183,18 @@ function openModal(item) {
   `;
 }
 
+async function loadListings() {
+  const res = await fetch("http://localhost:3000/api/listings");
+  const data = await res.json();
+
+  LISTINGS = data;
+  displayListings(LISTINGS);
+}
+
+window.onload = () => {
+  loadListings();
+};
+
 // Close Modal
 modalClose.addEventListener("click", () => {
   modalOverlay.classList.remove("open");
