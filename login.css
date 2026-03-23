@@ -1,0 +1,33 @@
+.main-container {
+    display: block;
+    padding-left: 5rem;
+    margin: 10px 200px;
+    justify-content: center;
+    text-align: center;
+}
+
+
+h1, h3 {
+    font-size: 25px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+}
+
+h1 {
+    color: rgb(0, 64, 255);
+    font-size: 40px;
+}
+
+.login-container {
+    padding: 30px;
+    margin: 30px;
+    border: 1px solid grey;
+    display: block;
+}
+
+label, input {
+    display: flex;
+    padding: 10px;
+    margin: 2px;
+    text-align: center;
+}
