@@ -1,7 +1,5 @@
-// === GLOBAL STATE ===
-let filteredListings = [...LISTINGS];
+let filteredListings = [LISTINGS];
 
-// === ELEMENTS ===
 const listingsGrid = document.getElementById("listingsGrid");
 const resultsCount = document.getElementById("resultsCount");
 const totalListings = document.getElementById("totalListings");
@@ -19,12 +17,11 @@ const listBtn = document.getElementById("listViewBtn");
 const regionsGrid = document.getElementById("regionsGrid");
 
 // Modal
-const modalOverlay = document.getElementById("modalOverlay");
-const modalBody = document.getElementById("modalBody");
-const modalGallery = document.getElementById("modalGallery");
-const modalClose = document.getElementById("modalClose");
+// const modalOverlay = document.getElementById("modalOverlay");
+// const modalBody = document.getElementById("modalBody");
+// const modalGallery = document.getElementById("modalGallery");
+// const modalClose = document.getElementById("modalClose");
 
-// === INIT ===
 function init() {
   displayListings(LISTINGS);
   renderRegions();
@@ -33,7 +30,7 @@ function init() {
 
 window.onload = init;
 
-// === DISPLAY LISTINGS ===
+// Display Listings 
 function displayListings(data) {
   listingsGrid.innerHTML = "";
 
@@ -53,9 +50,7 @@ function displayListings(data) {
     card.innerHTML = `
       <div class="card-image">
         <img src="${item.photos[0]}" alt="${item.title}">
-        <div class="card-badge ${item.verified ? "verified" : ""}">
-          ${item.verified ? "Verified" : "Standard"}
-        </div>
+        
       </div>
 
       <div class="card-body">
@@ -63,24 +58,24 @@ function displayListings(data) {
         <div class="card-title">${item.title}</div>
 
         <div class="card-meta">
-          <span>🛏 ${item.bedrooms}</span>
-          <span>🛁 ${item.bathrooms}</span>
-          <span>📐 ${item.size} sqm</span>
+          <span>${item.bedrooms} bedroom(s)</span>
+          <span>${item.bathrooms} bathroom(s)</span>
+          <span>${item.size} sqm</span>
         </div>
 
         <div class="card-footer">
-          <div class="card-price">KES ${item.price}</div>
+          <div class="card-price">Ksh ${item.price}</div>
           <button class="card-contact">View</button>
         </div>
       </div>
     `;
 
-    card.addEventListener("click", () => openModal(item));
+    //card.addEventListener("click", () => openModal(item));
     listingsGrid.appendChild(card);
   });
 }
 
-// === SEARCH ===
+// Search
 searchBtn.addEventListener("click", () => {
   const region = searchRegion.value;
   const type = searchType.value;
@@ -97,9 +92,9 @@ searchBtn.addEventListener("click", () => {
   displayListings(filteredListings);
 });
 
-// === SORT ===
+// Sort
 sortBy.addEventListener("change", () => {
-  let sorted = [...filteredListings];
+  let sorted = [filteredListings];
 
   switch (sortBy.value) {
     case "price-asc":
@@ -118,7 +113,7 @@ sortBy.addEventListener("change", () => {
   displayListings(sorted);
 });
 
-// === VIEW TOGGLE ===
+// Toggle
 gridBtn.addEventListener("click", () => {
   listingsGrid.classList.remove("list-view");
   gridBtn.classList.add("active");
@@ -131,7 +126,7 @@ listBtn.addEventListener("click", () => {
   gridBtn.classList.remove("active");
 });
 
-// === REGIONS ===
+// Regions
 function renderRegions() {
   regionsGrid.innerHTML = "";
 
@@ -157,7 +152,7 @@ function renderRegions() {
   });
 }
 
-// === MODAL ===
+// Modal
 function openModal(item) {
   modalOverlay.classList.add("open");
 
@@ -188,7 +183,7 @@ function openModal(item) {
   `;
 }
 
-// CLOSE MODAL
+// Close Modal
 modalClose.addEventListener("click", () => {
   modalOverlay.classList.remove("open");
 });
