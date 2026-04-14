@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Roomie Rentals — Find your perfect home in Kenya</title>
-    <!--link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -60,7 +60,7 @@
             </select>
           </div>
           <div class="search-field">
-            <label>Max Rent (Ksh)</label>
+            <label>Price (Ksh)</label>
             <select id="searchPrice">
               <option value="">Any Price</option>
               <option value="5000">Under 5,000</option>
@@ -75,11 +75,11 @@
         </div>
       </div>
 
-      <div class="hero-stats">
+      <!-- <div class="hero-stats">
         <div class="stat"><span class="stat-num" id="totalListings">0</span><span>Houses</span></div>
         <div class="stat"><span class="stat-num">8</span><span>Regions</span></div>
         <div class="stat"><span class="stat-num">100%</span><span>Affordable</span></div>
-      </div>
+      </div> -->
     </div>
   </header>
 
@@ -105,7 +105,7 @@
   <main class="listings-section">
     <div class="listings-grid" id="listingsGrid"></div>
     <div class="empty-state" id="emptyState" style="display:none">
-      <div class="empty-icon">🏚️</div>
+      <div class="empty-icon">🏠</div>
       <h3>No houses found</h3>
       <p>Try adjusting your filters or check back later.</p>
     </div>
