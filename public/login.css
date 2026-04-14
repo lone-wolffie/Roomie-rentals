@@ -39,7 +39,7 @@ body {
     color: var(--text);
 }
 
-.login-container {
+.login-container, .registration-container {
     background: #ffffff;
     color: #000;
     padding: 30px;
