@@ -1,4 +1,4 @@
-const LISTINGS = [
+export const LISTINGS = [
   {
     id: 1,
     title: "2 Bedroom Apartment, Kilimani",
@@ -11,7 +11,7 @@ const LISTINGS = [
     price: "55,000",
     available: true,
     //verified: true,
-    //description: "Spacious and fully finished 2-bedroom apartment in the heart of Kilimani. Features high ceilings, balcony views, and a modern kitchen. Backup generator and borehole water included. Close to Yaya Centre and Junction Mall.",
+    description: "Spacious and fully finished 2-bedroom apartment in Kilimani. Features high ceilings, balcony views and a modern kitchen. Backup generator and borehole water included.",
     amenities: ["Parking", "Security", "Generator", "Balcony", "CCTV"],
     phone: "+254 712 345 678",
     photos: [
@@ -32,7 +32,7 @@ const LISTINGS = [
     price: "18,000",
     available: true,
     //verified: true,
-    //description: "Clean, recently renovated bedsitter in a secure compound in Westlands. Ideal for a working professional. Good water supply, tiled floors, and 24hr security. Close to major offices and restaurants.",
+    description: "Clean, recently renovated bedsitter in a secure compound in Westlands. Good water supply, tiled floors and 24hr security.",
     amenities: ["Security", "Water 24hr"],
     phone: "+254 722 111 222",
     photos: [
@@ -52,7 +52,7 @@ const LISTINGS = [
     price: "120,000",
     available: true,
     //verified: true,
-    //description: "Stunning maisonette in Karen set on a lush, landscaped compound. Features open-plan living, fitted kitchen, DSQ (boys quarters), and ample parking. Very serene environment — ideal for families.",
+    description: "Stunning maisonette in Karen. Features a serene gardern, backup generator and ample parking.",
     amenities: ["Parking", "Garden", "Generator", "Security 24hr"],
     phone: "+254 733 999 888",
     photos: [
@@ -73,7 +73,7 @@ const LISTINGS = [
     price: "25,000",
     available: true,
     //verified: true,
-    //description: "Beautiful 1-bedroom apartment near Nyali Beach. Ocean breeze, sea views from the balcony, and a communal swimming pool. Perfect for couples or singles wanting the coastal lifestyle.",
+    description: "Beautiful 1-bedroom apartment near Nyali Beach. Ocean breeze and sea views from the balcony and a communal swimming pool.",
     amenities: ["Swimming Pool", "Balcony", "Sea View", "Security"],
     phone: "+254 700 456 789",
     photos: [
@@ -93,7 +93,7 @@ const LISTINGS = [
     price: "85,000",
     available: true,
     //verified: true,
-    //description: "Spacious 4-bedroom home along Ngong Road corridor. Large compound with a garden, garage for 3 cars, and a DSQ. Ideal for large families. KPLC prepaid metering, own borehole.",
+    description: "Spacious 4-bedroom home along Ngong Road. Large compound with a garden, spacious garage and CCTV.",
     amenities: ["Garage", "Garden", "Security", "CCTV"],
     phone: "+254 725 887 654",
     photos: [
@@ -113,7 +113,7 @@ const LISTINGS = [
     price: "9,500",
     available: true,
     //verified: true,
-    //description: "Clean and affordable 1-bedroom house in Pipeline. Good security, reliable water supply. Best for young professionals and couples on a budget.",
+    description: "Clean and affordable 1-bedroom house in Pipeline. Good security and reliable water supply.",
     amenities: ["Security", "Reliable Water", "Quiet Compound"],
     phone: "+254 798 001 002",
     photos: [
@@ -133,7 +133,7 @@ const LISTINGS = [
     price: "19,000",
     available: true,
     //verified: false,
-    //description: "Charming 2-bedroom flat in Mombasa's historic Old Town. Beautiful Swahili-style architecture, wooden ceilings, and a rooftop terrace. Walking distance to Fort Jesus and the ferry.",
+    description: "Beautiful 2-bedroom flat in Mombasa's Old Town.  Wooden ceilings and a rooftop terrace.",
     amenities: ["Rooftop", "Water 24hrs"],
     phone: "+254 741 123 456",
     photos: [
@@ -153,7 +153,7 @@ const LISTINGS = [
     price: "220,000",
     available: true,
     //verified: true,
-    //description: "Top-floor penthouse with panoramic Nairobi city views. Floor-to-ceiling windows, fully fitted chef's kitchen, jacuzzi, private terrace, and a private lift lobby. Premium, concierge-level security.",
+    description: "Top-floor penthouse with amazing Nairobi city views. Floor-to-ceiling windows, jacuzzi and a private lift lobby.",
     amenities: ["City View", "Jacuzzi", "Private Terrace", "Gym", "Concierge", "Generator", "Secure Parking", "Lift"],
     phone: "+254 700 111 999",
     photos: [
@@ -173,7 +173,7 @@ const LISTINGS = [
     price: "6,500",
     available: true,
     //verified: true,
-    //description: "Affordable bedsitter in a clean compound in Nakuru. Close to Nakuru National Park and the CBD. Running water, tiled floors. Suitable for students and young workers.",
+    description: "Affordable bedsitter in a clean compound in Nakuru. Running water and tiled floors.",
     amenities: ["Running Water", "Tiled floors", "Security"],
     phone: "+254 715 333 444",
     photos: [
@@ -193,7 +193,7 @@ const LISTINGS = [
     price: "35,000",
     available: true,
     //verified: true,
-    //description: "Lovely 3-bedroom bungalow with a landscaped garden in Eldoret's leafy Elgon View estate. Kids-friendly compound, ample parking, and 24hr security.",
+    description: "Lovely 3-bedroom bungalow in Eldoret. Kids-friendly compound, ample parking, and 24hr security.",
     amenities: ["Garden", "Parking", "Security"],
     phone: "+254 720 555 666",
     photos: [
@@ -213,7 +213,7 @@ const LISTINGS = [
     price: "38,000",
     available: true,
     //verified: true,
-    //description: "Stunning 2-bedroom apartment 200m from Silversands Beach in Malindi. Ocean views, private balcony, and fully furnished. Ideal as a holiday rental or long-stay.",
+    description: "Stunning 2-bedroom apartment in Malindi. Ocean views, private balcony and fully furnished.",
     amenities: ["Balcony", "Parking", "Security", "Water 24hrs"],
     phone: "+254 700 888 777",
     photos: [
@@ -223,5 +223,5 @@ const LISTINGS = [
   }
 ];
 
-const REGIONS = [];
+export const REGIONS = [];
  
