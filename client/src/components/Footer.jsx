@@ -30,7 +30,7 @@ function Footer() {
                 <div className="footer-links">
                     <h4>Support</h4>
                     <a href="#">Help Center</a>
-                    <a href="#">Report a Listing</a>
+                    <a href="#">Report a House</a>
                     <a href="#">Contact Us</a>
                 </div>
             </div>
