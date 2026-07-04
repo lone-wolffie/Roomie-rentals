@@ -223,5 +223,5 @@ export const LISTINGS = [
   }
 ];
 
-export const REGIONS = [];
+
  
