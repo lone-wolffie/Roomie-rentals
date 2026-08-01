@@ -5,6 +5,8 @@ import FilterBar from "./components/FilterBar.jsx";
 import Listings from "./components/Listings.jsx";
 import Footer from "./components/Footer.jsx";
 
+import Login from "./pages/Login.jsx";
+
 function App() {
   return (
     <>
@@ -13,6 +15,7 @@ function App() {
       < FilterBar/>
       <Listings />
       <Footer />
+      <Login />
     </>
   );
 }
