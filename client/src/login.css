@@ -100,7 +100,12 @@ p {
     text-align: center;
 }
 
-#error-message { font-size: 1rem; }
+#error-message {
+    color: #d62828;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
 
 a {
     color: var(--green);
