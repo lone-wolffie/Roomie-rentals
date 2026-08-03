@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import "../App.css";
+
 function Navbar() {
   return (
     <nav className="nav">
@@ -15,9 +18,9 @@ function Navbar() {
           <a href="#regions">Regions</a>
           <a href="#about">About</a>
 
-          <a href="/login.html" className="btn-admin">
+          <Link to="/login" className="btn-admin">
             Admin
-          </a>
+          </Link>
         </div>
 
         <button className="hamburger">

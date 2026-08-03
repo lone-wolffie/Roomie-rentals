@@ -9,7 +9,7 @@ function Home() {
     <>
       <Navbar />
       <Hero />
-      < FilterBar/>
+      <FilterBar/>
       <Listings />
       <Footer />
     </>
