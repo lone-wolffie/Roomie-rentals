@@ -13,8 +13,8 @@ function Footer() {
 
                 <div className="footer-links">
                     <h4>Platform</h4>
-                    <a href="#">Browse Houses</a>
-                    <a href="#">Post a House</a>
+                    <a href="#listings">Browse Houses</a>
+                    <Link to="/post-house">Post a House</Link>
                     <Link to="/login" className="footer-link">
                         Admin Login
                     </Link>

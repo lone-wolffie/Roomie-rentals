@@ -2,7 +2,7 @@ import { LISTINGS } from "../data/data.js";
 
 function Listings() {
   return (
-    <main className="listings-section">
+    <main className="listings-section" id="listings">
       <div className="listings-grid">
 
         {LISTINGS.map((item) => (

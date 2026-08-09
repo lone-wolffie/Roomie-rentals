@@ -23,7 +23,7 @@ body {
 }
 
 .main-container { 
-    min-height: 100h;
+    min-height: 100vh;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -38,13 +38,23 @@ body {
     color: var(--text);
 }
 
-.login-container, .registration-container {
+.login-container, .registration-container, .post-house-container {
     background: #ffffff;
     color: #000;
     padding: 30px;
     border-radius: 12px;
     width: 350px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.post-house-container {
+    width: 600px;
+    max-width: 90%;
+}
+
+.post-house-container p {
+    margin-top: 0;
+    margin-bottom: 20px;
 }
 
 form {
@@ -61,7 +71,7 @@ label {
     letter-spacing: 0.05rem;
 }
 
-input {
+input, select, textarea {
     padding: 12px 14px;
     border-radius: var(--radius);
     border: 1px solid var(--border);
@@ -70,7 +80,12 @@ input {
     transition: border var(--transition);
 }
 
-input:focus {
+.post-house-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+input:focus, select:focus, textarea:focus {
     outline: none;
     border-color: var(--green);
 }
@@ -94,7 +109,7 @@ button:hover {
 
 p {
     margin-top: 12px;
-    font-size: 0.85rem;
+    font-size: 1rem;
     color: var(--text-muted);
     text-align: center;
 }
@@ -121,7 +136,7 @@ a {
 }
 
 @media (max-width: 400px) {
-    .login-container, .registration-container {
+    .login-container, .registration-container, .post-house-container {
         width: 90%;
     }
 }

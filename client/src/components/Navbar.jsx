@@ -15,8 +15,7 @@ function Navbar() {
 
         <div className="nav-links">
           <a href="#listings">Browse</a>
-          <a href="#regions">Regions</a>
-          <a href="#about">About</a>
+          <Link to="/post-house">Post a House</Link>
 
           <Link to="/login" className="btn-admin">
             Admin
