@@ -11,7 +11,7 @@ function PostHouse() {
     const [size, setSize] = useState("");
     const [price, setPrice] = useState("");
     const [description, setDescription] = useState("");
-    // const [amenities, setAmenities] = useState("");
+    const [amenities, setAmenities] = useState([]);
     const [phone, setPhone] = useState("");
 
     const handlePostHouse = (event) => {
@@ -27,9 +27,27 @@ function PostHouse() {
             size,
             price,
             description,
+            amenities,
             phone
         });
     }
+
+    const handleAmenityChange = (event) => {
+        const { value, checked } = event.target;
+
+        if (checked) {
+            setAmenities((previousAmenities) => [
+            ...previousAmenities,
+            value
+            ]);
+        } else {
+            setAmenities((previousAmenities) =>
+            previousAmenities.filter(
+                (amenity) => amenity !== value
+            )
+            );
+        }
+    };
 
     return (
         <div className="main-container">
@@ -111,7 +129,7 @@ function PostHouse() {
                         onChange={(event) => setSize(event.target.value)}
                     />
 
-                    <label>Monthly Rent (Ksh)</label>
+                    <label>Price (Ksh)</label>
                     <input
                         type="number"
                         min="0"
@@ -135,6 +153,63 @@ function PostHouse() {
                         value={description}
                         onChange={(event) => setDescription(event.target.value)}
                     ></textarea>
+
+                    <label>Amenities</label>
+                    <div className="amenities-container">
+                        <label>
+                            <input
+                                type="checkbox"
+                                value="Parking"
+                                onChange={handleAmenityChange}
+                            />
+                            Parking
+                        </label>
+
+                        <label>
+                            <input
+                                type="checkbox"
+                                value="Security"
+                                onChange={handleAmenityChange}
+                            />
+                            Security
+                        </label>
+
+                        <label>
+                            <input
+                                type="checkbox"
+                                value="Generator"
+                                onChange={handleAmenityChange}
+                            />
+                            Generator
+                        </label>
+
+                        <label>
+                            <input
+                                type="checkbox"
+                                value="Balcony"
+                                onChange={handleAmenityChange}
+                            />
+                            Balcony
+                        </label>
+
+                        <label>
+                            <input
+                                type="checkbox"
+                                value="CCTV"
+                                onChange={handleAmenityChange}
+                            />
+                            CCTV
+                        </label>
+
+                        <label>
+                            <input
+                                type="checkbox"
+                                value="Others"
+                                onChange={handleAmenityChange}
+                            />
+                            Others
+                        </label>
+                    </div>
 
                     <label>Property Photos</label>
                     <input
