@@ -109,6 +109,11 @@ input:focus, select:focus, textarea:focus {
     padding: 0;
 }
 
+.amenities-container textarea {
+    grid-column: 1 / -1;
+    width: 100%;
+};
+
 button {
     margin-top: 10px;
     padding: 12px;

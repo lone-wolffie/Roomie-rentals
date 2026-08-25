@@ -12,10 +12,24 @@ function PostHouse() {
     const [price, setPrice] = useState("");
     const [description, setDescription] = useState("");
     const [amenities, setAmenities] = useState([]);
+    const [otherAmenity, setOtherAmenity] = useState("");
     const [phone, setPhone] = useState("");
 
     const handlePostHouse = (event) => {
         event.preventDefault();
+
+        const finalAmenities = amenities.filter(
+            (amenity) => amenity !== "Others"
+        );
+
+        if (amenities.includes("Others") && otherAmenity.trim() !== "") {
+            const otherAmenities = otherAmenity
+                .split(",")
+                .map((amenity) => amenity.trim())
+                .filter((amenity) => amenity !== "");
+
+            finalAmenities.push(...otherAmenities);
+        }
 
         console.log({
             title,
@@ -27,7 +41,8 @@ function PostHouse() {
             size,
             price,
             description,
-            amenities,
+            amenities: finalAmenities,
+            otherAmenity,
             phone
         });
     }
@@ -209,6 +224,16 @@ function PostHouse() {
                             />
                             Others
                         </label>
+
+                        {amenities.includes("Others") && (
+                            <textarea 
+                                rows="3"
+                                placeholder="Enter other amenities separated by commas"
+                                value={otherAmenity}
+                                onChange={(event) => setOtherAmenity(event.target.value)}
+                            
+                            />
+                        )}
                     </div>
 
                     <label>Property Photos</label>
