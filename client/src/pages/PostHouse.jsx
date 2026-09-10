@@ -14,6 +14,7 @@ function PostHouse() {
     const [amenities, setAmenities] = useState([]);
     const [otherAmenity, setOtherAmenity] = useState("");
     const [phone, setPhone] = useState("");
+    const [photos, setPhotos] = useState([]);
 
     const handlePostHouse = (event) => {
         event.preventDefault();
@@ -43,7 +44,8 @@ function PostHouse() {
             description,
             amenities: finalAmenities,
             otherAmenity,
-            phone
+            phone,
+            photos
         });
     }
 
@@ -64,6 +66,15 @@ function PostHouse() {
         }
     };
 
+    const handlePhotoChange = (event) => {
+        const selectedPhotos = Array.from(event.target.files); 
+
+        setPhotos((previousPhotos) => [
+            ...previousPhotos,
+            ...selectedPhotos
+        ]);
+    };
+
     return (
         <div className="main-container">
 
@@ -76,7 +87,7 @@ function PostHouse() {
                     <label>Property Title</label>
                     <input
                         type="text"
-                        placeholder="e.g. 2 Bedroom Apartment, Kilimani"
+                        placeholder="e.g. 2 Bedroom Apartment"
                         value={title}
                         onChange={(event) => setTitle(event.target.value)}
                     />
@@ -241,6 +252,7 @@ function PostHouse() {
                         type="file"
                         accept="image/*"
                         multiple
+                        onChange={handlePhotoChange}
                     />
 
                     <button type="submit">
