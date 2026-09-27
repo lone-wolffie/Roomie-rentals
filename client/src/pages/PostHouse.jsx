@@ -255,6 +255,19 @@ function PostHouse() {
                         onChange={handlePhotoChange}
                     />
 
+                    {photos.length > 0 && (
+                        <div className="photo-preview-container">
+                            {photos.map((photo, index) => (
+                                <div className="photo-preview" key={index}>
+                                    <img
+                                        src={URL.createObjectURL(photo)}
+                                        alt={`Property ${index + 1}`}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
                     <button type="submit">
                         Post House
                     </button>
