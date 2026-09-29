@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "../login.css";
 
 function PostHouse() {
@@ -15,6 +15,7 @@ function PostHouse() {
     const [otherAmenity, setOtherAmenity] = useState("");
     const [phone, setPhone] = useState("");
     const [photos, setPhotos] = useState([]);
+    const photoInputRef = useRef(null);
     const [successMessage, setSuccessMessage] = useState("");
 
     // handling form submission
@@ -113,6 +114,29 @@ function PostHouse() {
         });
 
         setSuccessMessage("House posted successfully");
+
+        setTimeout(() => {  
+            setSuccessMessage("");  
+        }, 3000);
+
+        // clearing input fields after successful submission
+        setTitle("");
+        setRegion("");
+        setNeighbourhood("");
+        setType("");
+        setBedrooms("");
+        setBathrooms("");
+        setSize("");
+        setPrice("");
+        setDescription("");
+        setAmenities([]);
+        setOtherAmenity("");
+        setPhone("");
+        setPhotos([]);
+
+        if (photoInputRef.current) {
+            photoInputRef.current.value = "";
+        }
     }
 
     // handling amenities selection
@@ -148,6 +172,10 @@ function PostHouse() {
         setPhotos((previousPhotos) => 
             previousPhotos.filter((_, index) => index !== indexToRemove)
         );
+
+        if (photoInputRef.current) {
+            photoInputRef.current.value = "";
+        }
     };
 
     // form contents 
@@ -262,6 +290,7 @@ function PostHouse() {
                             <input
                                 type="checkbox"
                                 value="Parking"
+                                checked={amenities.includes("Parking")}
                                 onChange={handleAmenityChange}
                             />
                             Parking
@@ -271,6 +300,7 @@ function PostHouse() {
                             <input
                                 type="checkbox"
                                 value="Security"
+                                checked={amenities.includes("Security")}
                                 onChange={handleAmenityChange}
                             />
                             Security
@@ -280,6 +310,7 @@ function PostHouse() {
                             <input
                                 type="checkbox"
                                 value="Generator"
+                                checked={amenities.includes("Generator")}
                                 onChange={handleAmenityChange}
                             />
                             Generator
@@ -289,6 +320,7 @@ function PostHouse() {
                             <input
                                 type="checkbox"
                                 value="Balcony"
+                                checked={amenities.includes("Balcony")}
                                 onChange={handleAmenityChange}
                             />
                             Balcony
@@ -298,6 +330,7 @@ function PostHouse() {
                             <input
                                 type="checkbox"
                                 value="CCTV"
+                                checked={amenities.includes("CCTV")}
                                 onChange={handleAmenityChange}
                             />
                             CCTV
@@ -307,6 +340,7 @@ function PostHouse() {
                             <input
                                 type="checkbox"
                                 value="Others"
+                                checked={amenities.includes("Others")}
                                 onChange={handleAmenityChange}
                             />
                             Others
@@ -315,7 +349,7 @@ function PostHouse() {
                         {amenities.includes("Others") && (
                             <textarea 
                                 rows="3"
-                                placeholder="Enter other amenities separated by commas"
+                                placeholder="Enter other amenities separated by commas. Eg: Swimming Pool, Gym, Garden"
                                 value={otherAmenity}
                                 onChange={(event) => setOtherAmenity(event.target.value)}
                             
@@ -325,6 +359,7 @@ function PostHouse() {
 
                     <label>Property Photos</label>
                     <input
+                        ref={photoInputRef}
                         type="file"
                         accept="image/*"
                         multiple
