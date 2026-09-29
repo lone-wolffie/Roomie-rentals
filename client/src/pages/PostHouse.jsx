@@ -20,6 +20,67 @@ function PostHouse() {
     const handlePostHouse = (event) => {
         event.preventDefault();
 
+        // validating form inputs
+        if (!title.trim()) {
+            alert("Please enter a property title.");
+            return;
+        }
+
+        if (!region) {
+            alert("Please select a region.");
+            return;
+        }
+
+        if (!neighbourhood.trim()) {
+            alert("Please enter the neighbourhood.");
+            return;
+        }
+
+        if (!type) {
+            alert("Please select the house type.");
+            return;
+        }
+
+        if (!bedrooms) {
+            alert("Please enter the number of bedrooms.");
+            return;
+        }
+
+        if (!bathrooms) {
+            alert("Please enter the number of bathrooms.");
+            return;
+        }
+
+        if (!size) {
+            alert("Please enter the property size.");
+            return;
+        }
+
+        if (!price) {
+            alert("Please enter the property price.");
+            return;
+        }
+
+        if (!phone.trim()) {
+            alert("Please enter a phone number.");
+            return;
+        }
+
+        if (!description.trim()) {
+            alert("Please enter a property description.");
+            return;
+        }
+
+        if (amenities.length === 0) {
+            alert("Please select at least one amenity.");
+            return;
+        }
+
+        if (photos.length === 0) {
+            alert("Please select at least one property photo.");
+            return;
+        }
+
         const finalAmenities = amenities.filter(
             (amenity) => amenity !== "Others"
         );
