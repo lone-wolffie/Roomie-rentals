@@ -185,6 +185,14 @@ p {
     text-align: center;
 }
 
+.success-message {
+    margin-top: 14px;
+    color: var(--green);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+}
+
 #error-message {
     color: #d62828;
     margin-top: 8px;

@@ -15,10 +15,12 @@ function PostHouse() {
     const [otherAmenity, setOtherAmenity] = useState("");
     const [phone, setPhone] = useState("");
     const [photos, setPhotos] = useState([]);
+    const [successMessage, setSuccessMessage] = useState("");
 
     // handling form submission
     const handlePostHouse = (event) => {
         event.preventDefault();
+        setSuccessMessage("");
 
         // validating form inputs
         if (!title.trim()) {
@@ -107,8 +109,10 @@ function PostHouse() {
             amenities: finalAmenities,
             otherAmenity,
             phone,
-            photos
+            photos,
         });
+
+        setSuccessMessage("House posted successfully");
     }
 
     // handling amenities selection
@@ -355,6 +359,12 @@ function PostHouse() {
                     <button type="submit">
                         Post House
                     </button>
+
+                    {successMessage && (
+                        <p className="success-message">
+                            {successMessage}
+                        </p>
+                    )}
 
                 </form>
             </div>
