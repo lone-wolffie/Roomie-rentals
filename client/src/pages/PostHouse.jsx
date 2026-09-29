@@ -16,6 +16,7 @@ function PostHouse() {
     const [phone, setPhone] = useState("");
     const [photos, setPhotos] = useState([]);
 
+    // handling form submission
     const handlePostHouse = (event) => {
         event.preventDefault();
 
@@ -49,6 +50,7 @@ function PostHouse() {
         });
     }
 
+    // handling amenities selection
     const handleAmenityChange = (event) => {
         const { value, checked } = event.target;
 
@@ -66,6 +68,7 @@ function PostHouse() {
         }
     };
 
+    // handling photo selection 
     const handlePhotoChange = (event) => {
         const selectedPhotos = Array.from(event.target.files); 
 
@@ -75,6 +78,14 @@ function PostHouse() {
         ]);
     };
 
+    // handling photo removal
+    const handleRemovePhoto = (indexToRemove) => {
+        setPhotos((previousPhotos) => 
+            previousPhotos.filter((_, index) => index !== indexToRemove)
+        );
+    };
+
+    // form contents 
     return (
         <div className="main-container">
 
@@ -263,6 +274,18 @@ function PostHouse() {
                                         src={URL.createObjectURL(photo)}
                                         alt={`Property ${index + 1}`}
                                     />
+
+                                    <button
+                                        type="button"
+                                        className="remove-photo-button"
+                                        onClick={(event) => {
+                                            event.preventDefault();
+                                            event.stopPropagation();
+                                            handleRemovePhoto(index);
+                                        }}
+                                    >
+                                        X
+                                    </button>
                                 </div>
                             ))}
                         </div>
