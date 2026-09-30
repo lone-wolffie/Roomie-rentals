@@ -84,9 +84,15 @@ function PostHouse() {
             return;
         }
 
-        const finalAmenities = amenities.filter(
-            (amenity) => amenity !== "Others"
-        );
+        const finalAmenities = [
+            ...amenities.filter((amenity) => amenity !== "Others"),
+            ...(otherAmenity ? otherAmenity
+                  .split(",")
+                  .map((amenity) => amenity.trim())
+                  .filter(Boolean) : []
+
+            )
+        ];
 
         if (amenities.includes("Others") && otherAmenity.trim() !== "") {
             const otherAmenities = otherAmenity
@@ -108,7 +114,6 @@ function PostHouse() {
             price,
             description,
             amenities: finalAmenities,
-            otherAmenity,
             phone,
             photos,
         });
@@ -117,7 +122,7 @@ function PostHouse() {
 
         setTimeout(() => {  
             setSuccessMessage("");  
-        }, 3000);
+        }, 2000);
 
         // clearing input fields after successful submission
         setTitle("");
