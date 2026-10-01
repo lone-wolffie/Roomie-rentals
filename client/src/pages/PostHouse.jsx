@@ -94,35 +94,29 @@ function PostHouse() {
             )
         ];
 
-        if (amenities.includes("Others") && otherAmenity.trim() !== "") {
-            const otherAmenities = otherAmenity
-                .split(",")
-                .map((amenity) => amenity.trim())
-                .filter((amenity) => amenity !== "");
-
-            finalAmenities.push(...otherAmenities);
-        }
-
-        console.log({
-            title,
+        // creating a new property object
+        const newProperty = {
+            title: title.trim(),
             region,
-            neighbourhood,
+            neighbourhood: neighbourhood.trim(),
             type,
-            bedrooms,
-            bathrooms,
-            size,
-            price,
-            description,
+            bedrooms: Number(bedrooms),
+            bathrooms: Number(bathrooms),
+            size: Number(size),
+            price: Number(price),
+            description: description.trim(),
             amenities: finalAmenities,
-            phone,
-            photos,
-        });
+            phone: phone.trim(),
+            photos
+        };
+
+        console.log("New Property:", newProperty);
 
         setSuccessMessage("House posted successfully");
 
         setTimeout(() => {  
             setSuccessMessage("");  
-        }, 2000);
+        }, 1000);
 
         // clearing input fields after successful submission
         setTitle("");
