@@ -20,6 +20,11 @@ app.get("/api/listings", (req, res) => {
   res.json(listings);
 });
 
+// get all houses for admins
+app.get("/api/properties", (req, res) => {
+  res.json(adminListings);
+});
+
 // new houses for admins
 app.post("/api/properties", (req, res) => {
   console.log("Property received from admin");
@@ -36,12 +41,8 @@ app.post("/api/properties", (req, res) => {
 
   res.status(200).json({
     message: "House added successfully",
-    data: req.body
+    data: newProperty
   });
-});
-
-app.get("/api/properties", (req, res) => {
-  res.json(adminListings);
 });
 
 // delete house

@@ -1,11 +1,43 @@
-import { LISTINGS } from "../data/data.js";
+// import { LISTINGS } from "../data/data.js";
+import { useState, useEffect} from "react";
 
 function Listings() {
+  const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/properties")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch properties");
+        }
+
+        return response.json();
+      })
+       .then((data) => {
+        setListings(data);
+        setLoading(false);
+       })
+      .catch((error) => {
+        console.error("Error fetching properties:", error);
+        setLoading(false);
+      });
+    }, []);
+
+    if (loading) {
+      return (
+        <main className="listings-section" id="listings">
+          <p>Loading Houses</p>
+        </main>
+
+      );
+    }
+
   return (
     <main className="listings-section" id="listings">
       <div className="listings-grid">
 
-        {LISTINGS.map((item) => (
+        {listings.map((item) => (
           <div className="property-card" key={item.id}>
 
             <div className="card-image">
