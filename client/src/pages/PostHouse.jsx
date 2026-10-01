@@ -16,12 +16,15 @@ function PostHouse() {
     const [phone, setPhone] = useState("");
     const [photos, setPhotos] = useState([]);
     const photoInputRef = useRef(null);
+
     const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     // handling form submission
-    const handlePostHouse = (event) => {
+    const handlePostHouse = async (event) => {
         event.preventDefault();
         setSuccessMessage("");
+        setErrorMessage("");
 
         // validating form inputs
         if (!title.trim()) {
@@ -110,13 +113,32 @@ function PostHouse() {
             photos
         };
 
-        console.log("New Property:", newProperty);
+        try {
+            // sending the new property to the server
+            const response = await fetch("http://localhost:3000/api/properties", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(newProperty)
+            });
 
-        setSuccessMessage("House posted successfully");
+            const data = await response.json();
 
-        setTimeout(() => {  
-            setSuccessMessage("");  
-        }, 1000);
+            if (!response.ok) {
+                throw new Error(data.message || "Failed to post property");
+            }
+
+            console.log("Server response:", data);
+
+            setSuccessMessage("House posted successfully");
+            setTimeout(() => {  
+                setSuccessMessage("");  
+            }, 1000);
+        } catch (error) {
+            console.error("Error posting house:", error);
+            setErrorMessage("Failed to post house. Please try again.");
+        }
 
         // clearing input fields after successful submission
         setTitle("");
@@ -397,6 +419,12 @@ function PostHouse() {
                     {successMessage && (
                         <p className="success-message">
                             {successMessage}
+                        </p>
+                    )}
+
+                    {errorMessage && (
+                        <p id="error-message">
+                            {errorMessage}
                         </p>
                     )}
 

@@ -7,32 +7,26 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
   res.send("Roomie Rentals API is running...");
 });
 
-
 // routes
 // all houses
-app.get("/", (req, res) => {
+app.get("/api/listings", (req, res) => {
   res.json(listings);
 });
 
 // new houses for admins
-app.post("/api/listings", (req, res) => {
-  const newListing = {
-    id: listings.length + 1,
-    ...req.body
-  };
-
-  listings.push(newListing);
+app.post("/api/properties", (req, res) => {
+  console.log("Property received from admin");
+  console.log(req.body);
 
   res.status(200).json({
     message: "House added successfully",
-    data: newListing
+    data: req.body
   });
 });
 
