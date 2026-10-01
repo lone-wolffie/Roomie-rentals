@@ -4,6 +4,8 @@ import cors from "cors";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+let adminListings = [];
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -13,8 +15,7 @@ app.get("/", (req, res) => {
   res.send("Roomie Rentals API is running...");
 });
 
-// routes
-// all houses
+// all houses route
 app.get("/api/listings", (req, res) => {
   res.json(listings);
 });
@@ -24,10 +25,23 @@ app.post("/api/properties", (req, res) => {
   console.log("Property received from admin");
   console.log(req.body);
 
+  const newProperty = {
+    id: adminListings.length + 1,
+    ...req.body,
+    dateAdded: new Date().toISOString()
+  };
+
+  adminListings.push(newProperty);
+  console.log("New property added:", newProperty);
+
   res.status(200).json({
     message: "House added successfully",
     data: req.body
   });
+});
+
+app.get("/api/properties", (req, res) => {
+  res.json(adminListings);
 });
 
 // delete house
