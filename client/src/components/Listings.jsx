@@ -33,6 +33,7 @@ function Listings() {
       );
     }
 
+    
   return (
     <main className="listings-section" id="listings">
       <div className="listings-grid">

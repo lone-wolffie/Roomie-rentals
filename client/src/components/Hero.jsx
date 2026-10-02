@@ -1,4 +1,19 @@
+import { useState } from "react";
+
 function Hero() {
+    // search filters 
+    const [region, setRegion] = useState("All Regions");
+    const [type, setType] = useState("Any Type");
+    const [price, setPrice] = useState("Any Price");
+
+    const handleSearch = ({ onSearch}) => {
+        onSearch({
+            region,
+            type,
+            price
+        });
+    };
+
     return (
         <header className="hero">
             <div className="hero-content">
@@ -14,7 +29,10 @@ function Hero() {
                         <div className  ="search-field">
                             <label>Region</label>
 
-                            <select id="searchRegion">
+                            <select    
+                                value={region}  
+                                onChange={(event) => setRegion(event.target.value)}
+                            >
                                 <option>All Regions</option>
                                 <option>Nairobi</option>
                                 <option>Mombasa</option>
@@ -29,7 +47,10 @@ function Hero() {
                         <div className="search-field">
                             <label>Type of house</label>
 
-                            <select id="searchType">
+                            <select         
+                                value={type}    
+                                onChange={(event) => setType(event.target.value)}   
+                            >
                                 <option>Any Type</option>
                                 <option>Bedsitter</option>
                                 <option>1 Bedroom</option>
@@ -42,7 +63,10 @@ function Hero() {
                         <div className="search-field">
                             <label>Price (Ksh)</label>
 
-                            <select id="searchPrice">
+                            <select         
+                                value={price}   
+                                onChange={(event) => setPrice(event.target.value)}
+                            >
                                 <option>Any Price</option>
                                 <option value="5000">Under 5,000</option>
                                 <option value="10000">Under 10,000</option>
@@ -53,7 +77,12 @@ function Hero() {
                             </select>
                         </div>
 
-                        <button className="search-btn" id="searchBtn">Search</button>
+                        <button 
+                            className="search-btn"  
+                            onClick={handleSearch}
+                        >
+                            Search
+                        </button>
                     </div>
                 </div>
             </div>
