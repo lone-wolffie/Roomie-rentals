@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-function Hero() {
+function Hero( { onSearch} ) {
     // search filters 
     const [region, setRegion] = useState("All Regions");
     const [type, setType] = useState("Any Type");
     const [price, setPrice] = useState("Any Price");
 
-    const handleSearch = ({ onSearch}) => {
+    const handleSearch = () => {
         onSearch({
             region,
             type,

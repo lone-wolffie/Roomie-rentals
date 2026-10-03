@@ -1,7 +1,7 @@
 // import { LISTINGS } from "../data/data.js";
 import { useState, useEffect} from "react";
 
-function Listings() {
+function Listings({ filters }) {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,49 +33,76 @@ function Listings() {
       );
     }
 
-    
+    // filter the houses based on the search filters
+    const filteredListings = listings.filter((item) => {
+
+      // filter by region
+      const matchesRegion = filters.region === "All Regions" || item.region === filters.region;
+      // filter by type
+      const matchesType = filters.type === "Any Type" || item.type === filters.type;
+      // filter by price
+      let matchesPrice = true;
+      if (filters.price !== "Any Price") {
+        const selectedPrice = Number(filters.price);
+        const propertyPrice = Number(String(item.price).replace(/,/g, '')); // Remove commas and convert to number
+
+        matchesPrice = propertyPrice < selectedPrice;
+      }
+
+      return matchesRegion && matchesType && matchesPrice;
+    });
+
+
   return (
     <main className="listings-section" id="listings">
       <div className="listings-grid">
 
-        {listings.map((item) => (
-          <div className="property-card" key={item.id}>
+        {filteredListings.length > 0 ? (
+          filteredListings.map((item) => (
+            <div className="property-card" key={item.id}>
 
-            <div className="card-image">
-              <img src={item.photos[0]} alt={item.title} />
-            </div>
-
-            <div className="card-body">
-
-              <div className="card-region">
-                {item.region}
+              <div className="card-image">
+                <img src={item.photos[0]} alt={item.title} />
               </div>
 
-              <div className="card-title">
-                {item.title}
-              </div>
+              <div className="card-body">
 
-              <div className="card-meta">
-                <span>{item.bedrooms} bedroom(s)</span>
-                <span>{item.bathrooms} bathroom(s)</span>
-                <span>{item.size} sqm</span>
-              </div>
-
-              <div className="card-footer">
-                <div className="card-price">
-                  Ksh {item.price}
+                <div className="card-region">
+                  {item.region}
                 </div>
 
-                <button className="card-contact">
-                  View
-                </button>
+                <div className="card-title">
+                  {item.title}
+                </div>
+
+                <div className="card-meta">
+                  <span>{item.bedrooms} bedroom(s)</span>
+                  <span>{item.bathrooms} bathroom(s)</span>
+                  <span>{item.size} sqm</span>
+                </div>
+
+                <div className="card-footer">
+                  <div className="card-price">
+                    Ksh {item.price}
+                  </div>
+
+                  <button className="card-contact">
+                    View
+                  </button>
+                </div>
+
               </div>
 
             </div>
+          ))
+        ) : (
+          <div className="empty-results">
+            <div className="empty-icon">🏠</div>
 
+            <h3>No houses found</h3>
+            <p> We couldn't find any houses matching your search.</p>
           </div>
-        ))}
-
+        )}
       </div>
     </main>
   );
