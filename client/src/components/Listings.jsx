@@ -24,6 +24,10 @@ function Listings({ filters }) {
       });
     }, []);
 
+    const handleView = (item) => {
+      console.log("Selected property:", item);
+    };
+
     if (loading) {
       return (
         <main className="listings-section" id="listings">
@@ -86,7 +90,10 @@ function Listings({ filters }) {
                     Ksh {item.price}
                   </div>
 
-                  <button className="card-contact">
+                  // 
+                  <button className="card-contact"
+                    onClick={() => handleView(item)}
+                  >
                     View
                   </button>
                 </div>
