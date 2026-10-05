@@ -90,7 +90,7 @@ function Listings({ filters }) {
                     Ksh {item.price}
                   </div>
 
-                  // 
+                
                   <button className="card-contact"
                     onClick={() => handleView(item)}
                   >
