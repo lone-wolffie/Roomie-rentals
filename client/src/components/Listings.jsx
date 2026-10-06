@@ -1,9 +1,11 @@
 // import { LISTINGS } from "../data/data.js";
+import PropertyDetails from "./PropertyDetails.jsx";
 import { useState, useEffect} from "react";
 
 function Listings({ filters }) {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:3000/api/properties")
@@ -25,7 +27,7 @@ function Listings({ filters }) {
     }, []);
 
     const handleView = (item) => {
-      console.log("Selected property:", item);
+      setSelectedProperty(item);
     };
 
     if (loading) {
@@ -55,6 +57,15 @@ function Listings({ filters }) {
 
       return matchesRegion && matchesType && matchesPrice;
     });
+
+    if (selectedProperty) {
+      return (
+        <PropertyDetails 
+            property={selectedProperty}
+            onBack={() => setSelectedProperty(null)}
+        />
+      );
+    }
 
 
   return (
