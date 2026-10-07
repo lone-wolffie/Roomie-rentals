@@ -70,58 +70,58 @@ function Listings({ filters }) {
 
   return (
     <main className="listings-section" id="listings">
-      <div className="listings-grid">
+        <div className="listings-grid">
 
-        {filteredListings.length > 0 ? (
-          filteredListings.map((item) => (
-            <div className="property-card" key={item.id}>
+            {filteredListings.length > 0 ? (
+            filteredListings.map((item) => (
+                <div className="property-card" key={item.id}>
 
-              <div className="card-image">
-                <img src={item.photos[0]} alt={item.title} />
-              </div>
-
-              <div className="card-body">
-
-                <div className="card-region">
-                  {item.region}
+                <div className="card-image">
+                    <img src={item.photos[0]} alt={item.title} />
                 </div>
 
-                <div className="card-title">
-                  {item.title}
+                <div className="card-body">
+
+                    <div className="card-region">
+                    {item.region}
+                    </div>
+
+                    <div className="card-title">
+                    {item.title}
+                    </div>
+
+                    <div className="card-meta">
+                    <span>{item.bedrooms} bedroom(s)</span>
+                    <span>{item.bathrooms} bathroom(s)</span>
+                    <span>{item.size} sqm</span>
+                    </div>
+
+                    <div className="card-footer">
+                    <div className="card-price">
+                        Ksh {item.price}
+                    </div>
+
+                    
+                    <button className="view-btn"
+                        onClick={() => handleView(item)}
+                    >
+                        View
+                    </button>
+                    </div>
+
                 </div>
 
-                <div className="card-meta">
-                  <span>{item.bedrooms} bedroom(s)</span>
-                  <span>{item.bathrooms} bathroom(s)</span>
-                  <span>{item.size} sqm</span>
                 </div>
+            ))
+            ) : (
+                <div className="empty-results">
+                    <div className="empty-icon">🏠</div>
 
-                <div className="card-footer">
-                  <div className="card-price">
-                    Ksh {item.price}
-                  </div>
-
-                
-                  <button className="card-contact"
-                    onClick={() => handleView(item)}
-                  >
-                    View
-                  </button>
-                </div>
-
-              </div>
-
+                    <h3>No houses found</h3>
+                    <p> We couldn't find any houses matching your search.</p>
             </div>
-          ))
-        ) : (
-          <div className="empty-results">
-            <div className="empty-icon">🏠</div>
-
-            <h3>No houses found</h3>
-            <p> We couldn't find any houses matching your search.</p>
-          </div>
-        )}
-      </div>
+            )}
+        </div>
     </main>
   );
 }

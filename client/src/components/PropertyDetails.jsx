@@ -26,11 +26,11 @@ function PropertyDetails ({ property, onBack }) {
                     {property.region}
                 </div>
 
-                <h1>{property.title}</h1>
+                <h2>{property.title}</h2>
 
-                <p className="property-location">
+                <div className="property-location">
                     {property.neighbourhood}
-                </p>
+                </div>
 
                 <div className="property-details-data">
                     <span> 🛏️ {property.bedrooms} bedroom(s)</span>
