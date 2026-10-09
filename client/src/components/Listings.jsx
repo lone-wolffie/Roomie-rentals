@@ -2,30 +2,31 @@
 import PropertyDetails from "./PropertyDetails.jsx";
 import { useState, useEffect} from "react";
 
-function Listings({ filters }) {
+function Listings({ filters, sortBy }) {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProperty, setSelectedProperty] = useState(null);
 
-  useEffect(() => {
-    fetch("http://localhost:3000/api/properties")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch properties");
-        }
+  	useEffect(() => {
+		fetch("http://localhost:3000/api/properties")
+		.then((response) => {
+			if (!response.ok) {
+			throw new Error("Failed to fetch properties");
+			}
 
-        return response.json();
-      })
-       .then((data) => {
-        setListings(data);
-        setLoading(false);
-       })
-      .catch((error) => {
-        console.error("Error fetching properties:", error);
-        setLoading(false);
-      });
+			return response.json();
+		})
+		.then((data) => {
+			setListings(data);
+			setLoading(false);
+		})
+		.catch((error) => {
+			console.error("Error fetching properties:", error);
+			setLoading(false);
+		});
     }, []);
 
+	// viewing ore details of a property
     const handleView = (item) => {
       setSelectedProperty(item);
     };
@@ -67,63 +68,80 @@ function Listings({ filters }) {
       );
     }
 
+    // sort the filtered houses based on the selected sort option
+    const sortedListings = [...filteredListings].sort((a, b) => {
+      	switch (sortBy) {
+			case "price-asc":
+				return Number(String(a.price).replace(/,/g, "")) - Number(String(b.price).replace(/,/g, ""));
 
-  return (
-    <main className="listings-section" id="listings">
-        <div className="listings-grid">
+			case "price-desc":
+				return Number(String(b.price).replace(/,/g, "")) - Number(String(a.price).replace(/,/g, ""));
 
-            {filteredListings.length > 0 ? (
-            filteredListings.map((item) => (
-                <div className="property-card" key={item.id}>
+			case "size-asc":
+				return Number(a.size) - Number(b.size);
 
-                <div className="card-image">
-                    <img src={item.photos[0]} alt={item.title} />
-                </div>
+			case "newest":
+				default:
+				return new Date(b.dateAdded || 0) - new Date(a.dateAdded || 0);
+        }
+    });
 
-                <div className="card-body">
+  	return (
+		<main className="listings-section" id="listings">
+			<div className="listings-grid">
 
-                    <div className="card-region">
-                    {item.region}
-                    </div>
+				{filteredListings.length > 0 ? (
+					sortedListings.map((item) => (
+						<div className="property-card" key={item.id}>
 
-                    <div className="card-title">
-                    {item.title}
-                    </div>
+						<div className="card-image">
+							<img src={item.photos[0]} alt={item.title} />
+						</div>
 
-                    <div className="card-meta">
-                    <span>{item.bedrooms} bedroom(s)</span>
-                    <span>{item.bathrooms} bathroom(s)</span>
-                    <span>{item.size} sqm</span>
-                    </div>
+						<div className="card-body">
 
-                    <div className="card-footer">
-                    <div className="card-price">
-                        Ksh {item.price}
-                    </div>
+							<div className="card-region">
+							{item.region}
+							</div>
 
-                    
-                    <button className="view-btn"
-                        onClick={() => handleView(item)}
-                    >
-                        View
-                    </button>
-                    </div>
+							<div className="card-title">
+							{item.title}
+							</div>
 
-                </div>
+							<div className="card-meta">
+							<span>{item.bedrooms} bedroom(s)</span>
+							<span>{item.bathrooms} bathroom(s)</span>
+							<span>{item.size} sqm</span>
+							</div>
 
-                </div>
-            ))
-            ) : (
-                <div className="empty-results">
-                    <div className="empty-icon">🏠</div>
+							<div className="card-footer">
+							<div className="card-price">
+								Ksh {item.price}
+							</div>
 
-                    <h3>No houses found</h3>
-                    <p> We couldn't find any houses matching your search.</p>
-            </div>
-            )}
-        </div>
-    </main>
-  );
+							
+							<button className="view-btn"
+								onClick={() => handleView(item)}
+							>
+								View
+							</button>
+							</div>
+
+						</div>
+
+						</div>
+					))
+				) : (
+					<div className="empty-results">
+						<div className="empty-icon">🏠</div>
+
+						<h3>No houses found</h3>
+						<p> We couldn't find any houses matching your search.</p>
+					</div>
+				)}
+			</div>
+		</main>
+    );
 }
 
 export default Listings;
