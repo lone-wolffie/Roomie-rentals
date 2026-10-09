@@ -1,4 +1,15 @@
-function FilterBar() {
+import { useState } from "react";
+
+function FilterBar({ onSortChange }) {
+    const [sortBy, setSortBy] = useState("newest");
+
+    const handleSortChange = (event) => {
+        const selectedSort = event.target.value;
+
+        setSortBy(selectedSort);
+        onSortChange(selectedSort);
+    };
+
     return (
         <section className="filter-bar" id="listings">
             <div className="filter-inner">
@@ -9,9 +20,9 @@ function FilterBar() {
                 </div>
 
             <div className="filter-right">
-                    <label>Sort by:</label>
+                    <label htmlFor="sortBy">Sort by:</label>
 
-                    <select id="sortBy">
+                    <select id="sortBy" value={sortBy} onChange={handleSortChange}>
                         <option value="newest">Newest First</option>
                         <option value="price-asc">Price: Low to High</option>
                         <option value="price-desc">Price: High to Low</option>

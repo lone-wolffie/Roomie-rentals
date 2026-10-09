@@ -18,12 +18,17 @@ function Home() {
     setFilters(searchFilters);
   };
 
+  const [sortBy, setSortBy] = useState("newest");
+  const handleSortChange = (selectedSort) => {
+    setSortBy(selectedSort);
+  }
+
   return (
     <>
       <Navbar />
       <Hero onSearch={handleSearch} />
-      <FilterBar />
-      <Listings  filters={filters}/>
+      <FilterBar onSortChange={handleSortChange} />
+      <Listings  filters={filters} sortBy={sortBy} />
       <Footer />
     </>
   );
