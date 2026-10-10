@@ -17,7 +17,7 @@ function PropertyDetails ({ property, onBack }) {
 
             <div className="property-details-image">
                 <img 
-                    src={property.photos?.[0]} alt={property.title}
+                    src={`http://localhost:3000${property.photos?.[0]}`} alt={property.title}
                 />
             </div>
 
