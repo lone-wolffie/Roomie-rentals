@@ -115,12 +115,20 @@ function PostHouse() {
 
         try {
             // sending the new property to the server
+            const formData = new FormData();
+
+            formData.append("property", JSON.stringify({
+                ...newProperty,
+                photos: []
+            }));
+
+            photos.forEach((photo) => {
+                formData.append("photos", photo);
+            });
+
             const response = await fetch("http://localhost:3000/api/properties", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(newProperty)
+                body: formData
             });
 
             const data = await response.json();
