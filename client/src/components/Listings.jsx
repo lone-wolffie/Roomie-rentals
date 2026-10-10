@@ -95,7 +95,7 @@ function Listings({ filters, sortBy }) {
 						<div className="property-card" key={item.id}>
 
 						<div className="card-image">
-							<img src={item.photos[0]} alt={item.title} />
+							<img src={`http://localhost:3000${item.photos[0]}`} alt={item.title} />
 						</div>
 
 						<div className="card-body">
