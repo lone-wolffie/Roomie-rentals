@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../login.css";
 
 function Register() {
@@ -7,17 +7,20 @@ function Register() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const navigate = useNavigate();
 
     const handleRegister = async (event) => {
         event.preventDefault();
+
+        setSuccessMessage("");
+        setErrorMessage("");
 
         if (!fullName || !phoneNumber || !email || !password) {
             setErrorMessage("Please fill in all the fields.");
             return;
         }
-
-        setErrorMessage("");
 
         try {
             const response = await fetch("http://localhost:3000/api/register", {
@@ -32,15 +35,25 @@ function Register() {
                     password,
                 }),
             });
-
+            
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || "Registration failed. Please try again.");
+                setErrorMessage(data.message);
+                setTimeout(() => {
+                    setErrorMessage("");
+                }, 4000);
+                return;
             } 
-            alert("Registration successful! You can now log in.");
+            setSuccessMessage("Registration was successful!");
+
+
+            // Navigate to the home page after successful registration
+            setTimeout(() => {
+                navigate("/");
+            }, 2000);
         } catch (error) {
-            console.error("Error during registration:", error);
+            setErrorMessage("Error during registration. Please try again:", error);
         }  
     };
 
@@ -99,6 +112,11 @@ function Register() {
                         <Link to="/login">Login</Link>
                     </p>
 
+                    {successMessage && (
+                        <p className="success-message">
+                            {successMessage}
+                        </p>
+                    )}
                     {errorMessage && (
                         <p id="error-message">
                         {errorMessage}
