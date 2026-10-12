@@ -37,7 +37,51 @@ app.get("/", (req, res) => {
     res.send("Roomie Rentals API is running...");
 });
 
+// user login
+app.post("/api/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
+        // check if user exists
+        const user = users.find(
+            (user) => user.email === email.trim().toLowerCase()
+        );
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found."
+            });
+        }
+
+        // verify the password
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordMatch) {
+            return res.status(401).json({
+                message: "Invalid password."
+            });
+        }
+
+        // if login is successful
+        return res.status(200).json({
+            message: "Login was successful!",
+            user: {
+                id: user.id,
+                fullName: user.fullName,
+                phoneNumber: user.phoneNumber,
+                email: user.email
+            }
+        });
+    } catch (error) {
+        console.error("Login error:", error);
+
+        return res.status(500).json({
+            message: "Something went wrong during login. Please try again later."
+        });
+    }
+});
+
+// user registration
 app.post("/api/register", async (req, res) => {
     try {
         const { fullName, phoneNumber, email, password } = req.body;

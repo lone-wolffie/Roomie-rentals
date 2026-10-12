@@ -3,76 +3,109 @@ import { Link, useNavigate } from "react-router-dom";
 import "../login.css";
 
 function Login() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
-  const handleLogin = (event) => {
-    event.preventDefault();
+    const handleLogin = async (event) => {
+        event.preventDefault();
 
-    if (!email || !password) {
-      setErrorMessage("Please enter both email and password.");
-      return;
-    }
+        setSuccessMessage("");
+        setErrorMessage("");
 
-    setErrorMessage("");
+        if (!email || !password) {
+            setErrorMessage("Please enter both email and password.");
+            return;
+        }
 
-    console.log({
-      email,
-      password,
-    });
+        try {
+            const response = await fetch("http://localhost:3000/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                }),
+            });
 
-    navigate("/");
-  };
+            const data = await response.json();
 
-  return (
-    <div className="main-container">
-      <h2>Admin Login</h2>
+            if (!response.ok) {
+                setErrorMessage(data.message);
+                setTimeout(() => {
+                    setErrorMessage("");
+                }, 3000);
+                return;
+            }
+            setSuccessMessage("Login was successful!");
 
-      <div className="login-container">
-        <form onSubmit={handleLogin}>
+            // navigate to home page
+            setTimeout(() => {
+                navigate("/");
+            }, 2000);
+        } catch (error) {
+            setErrorMessage("Error during login. Please try again.", error);
+        }
 
-          <label>Email</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="Please enter your email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
+    };
 
-          <label>Password</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Please enter your password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
+    return (
+        <div className="main-container">
+            <h2>Admin Login</h2>
 
-          <button type="submit">
-            Login
-          </button>
+            <div className="login-container">
+                <form onSubmit={handleLogin}>
 
-          <p>
-            Don't have an account?{" "}
-            <Link to="/register">Register</Link>
-          </p>
+                    <label>Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Please enter your email"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        required
+                    />
 
-          {errorMessage && (
-            <p id="error-message">
-              {errorMessage}
-            </p>
-          )}
+                    <label>Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Please enter your password"
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                        required
+                    />
 
-        </form>
-      </div>
-    </div>
-  );
+                    <button type="submit">
+                        Login
+                    </button>
+
+                    <p>
+                        Don't have an account?{" "}
+                        <Link to="/register">Register</Link>
+                    </p>
+
+                    {successMessage && (
+                        <p className="success-message">
+                            {successMessage}
+                        </p>
+                    )}
+
+                    {errorMessage && (
+                        <p id="error-message">
+                        {errorMessage}
+                        </p>
+                    )}
+
+                </form>
+            </div>
+        </div>
+    );
 }
 
 export default Login;
