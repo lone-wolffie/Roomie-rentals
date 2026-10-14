@@ -1,7 +1,10 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "../login.css";
 
 function PostHouse() {
+    const navigate = useNavigate();
+
     const [title, setTitle] = useState("");
     const [region, setRegion] = useState("");
     const [neighbourhood, setNeighbourhood] = useState("");
@@ -134,15 +137,14 @@ function PostHouse() {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || "Failed to post property");
+                throw new Error(data.message);
             }
 
-            console.log("Server response:", data);
-
             setSuccessMessage("House posted successfully");
+
             setTimeout(() => {  
-                setSuccessMessage("");  
-            }, 1000);
+                navigate("/");
+            }, 2000);
         } catch (error) {
             console.error("Error posting house:", error);
             setErrorMessage("Failed to post house. Please try again.");
@@ -256,9 +258,9 @@ function PostHouse() {
                         <option value="">Select house type</option>
                         <option value="Bedsitter">Bedsitter</option>
                         <option value="1 Bedroom">1 Bedroom</option>
-                        <option value="2 Bedrooms">2 Bedrooms</option>
-                        <option value="3 Bedrooms">3 Bedrooms</option>
-                        <option value="4+ Bedrooms">4+ Bedrooms</option>
+                        <option value="2 Bedrooms">2 Bedroom</option>
+                        <option value="3 Bedrooms">3 Bedroom</option>
+                        <option value="4+ Bedrooms">4+ Bedroom</option>
                     </select>
 
                     <label>Number of Bedrooms</label>
