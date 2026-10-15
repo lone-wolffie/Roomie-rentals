@@ -1,13 +1,34 @@
-function PropertyDetails ({ property, onBack }) {
+import { useState } from "react";
+
+function PropertyDetails({ property, onBack }) {
+    // track the photo being displayed
+    const [photoIndex, setPhotoIndex] = useState(0);
+
     if (!property) {
         return (
             <div className="main-container">
                 <h2>Property not found</h2>
-
                 <button onClick={onBack}>Back to listings</button>
             </div>
         );
     }
+
+    const photos = Array.isArray(property.photos) ? property.photos : [];
+    const hasPhotos = photos.length > 0;
+
+    // Move to the previous photo
+    const handlePreviousPhoto = () => {
+        setPhotoIndex((previousIndex) =>
+            (previousIndex - 1 + photos.length) % photos.length
+        );
+    };
+
+    // Move to the next photo
+    const handleNextPhoto = () => {
+        setPhotoIndex((previousIndex) =>
+            (previousIndex + 1) % photos.length
+        );
+    };
 
     return (
         <div className="property-details">
@@ -16,9 +37,44 @@ function PropertyDetails ({ property, onBack }) {
             </button>
 
             <div className="property-details-image">
-                <img 
-                    src={`http://localhost:3000${property.photos?.[0]}`} alt={property.title}
-                />
+                {hasPhotos ? (
+                    <>
+                        <img
+                            src={`http://localhost:3000${photos[photoIndex]}`}
+                            alt={`${property.title} - Photo ${photoIndex + 1}`}
+                        />
+
+                        {photos.length > 1 && (
+                            <>
+                                <button
+                                    type="button"
+                                    id="photo-prev"
+                                    aria-label="Previous photo"
+                                    onClick={handlePreviousPhoto}
+                                >
+                                    &#10094;
+                                </button>
+
+                                <button
+                                    type="button"
+                                    id="photo-next"
+                                    aria-label="Next photo"
+                                    onClick={handleNextPhoto}
+                                >
+                                    &#10095;
+                                </button>
+
+                                <span className="photo-counter">
+                                    {photoIndex + 1} / {photos.length}
+                                </span>
+                            </>
+                        )}
+                    </>
+                ) : (
+                    <div className="no-photo">
+                        No photo available
+                    </div>
+                )}
             </div>
 
             <div className="property-details-content">
@@ -33,9 +89,9 @@ function PropertyDetails ({ property, onBack }) {
                 </div>
 
                 <div className="property-details-data">
-                    <span> 🛏️ {property.bedrooms} bedroom(s)</span>
-                    <span> 🚿 {property.bathrooms} bathroom(s)</span>
-                    <span> 📐 {property.size} sqm</span>
+                    <span>🛏️ {property.bedrooms} bedroom(s)</span>
+                    <span>🚿 {property.bathrooms} bathroom(s)</span>
+                    <span>📐 {property.size} sqm</span>
                 </div>
 
                 <div className="property-details-price">
@@ -50,17 +106,16 @@ function PropertyDetails ({ property, onBack }) {
                 <div className="property-amenities">
                     <h2>Amenities</h2>
 
-                    <div className="amenities-list"> 
+                    <div className="amenities-list">
                         {property.amenities?.map((amenity, index) => (
                             <span key={index}>
                                 {amenity}
                             </span>
-                        ))}    
+                        ))}
                     </div>
                 </div>
 
                 <div className="property-contact">
-
                     <h2>Contact</h2>
 
                     <p>{property.phone}</p>
@@ -68,11 +123,10 @@ function PropertyDetails ({ property, onBack }) {
                     <button className="contact-owner-button">
                         Contact Owner
                     </button>
-
                 </div>
             </div>
         </div>
     );
 }
-          
+
 export default PropertyDetails;

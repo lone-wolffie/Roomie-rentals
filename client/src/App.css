@@ -435,9 +435,12 @@ html, body, #root {
     border-radius: var(--radius);
     background: #e5e0d8;
     margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
 }
 
 .property-details-image img {
+    display: block;
     width: 100%;
     height: 100%;
 }
