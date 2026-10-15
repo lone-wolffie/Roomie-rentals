@@ -3,11 +3,12 @@ import PropertyDetails from "./PropertyDetails.jsx";
 import { useState, useEffect} from "react";
 
 function Listings({ filters, sortBy }) {
-  const [listings, setListings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedProperty, setSelectedProperty] = useState(null);
+    const [listings, setListings] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedProperty, setSelectedProperty] = useState(null);
+    const [photoIndexes, setPhotoIndexes] = useState({});
 
-  	useEffect(() => {
+    useEffect(() => {
 		fetch("http://localhost:3000/api/properties")
 		.then((response) => {
 			if (!response.ok) {
@@ -93,41 +94,100 @@ function Listings({ filters, sortBy }) {
 				{filteredListings.length > 0 ? (
 					sortedListings.map((item) => (
 						<div className="property-card" key={item.id}>
+							<div className="card-image"> 
+                                {/* check if there are multiple photos and loop through them*/}
+								{Array.isArray(item.photos) && item.photos.length > 0 ? ( 
+									<>
+										<img
+											src={`http://localhost:3000${
+												item.photos[photoIndexes[item.id] || 0]
+											}`}
+											alt={`${item.title} - Photo ${(photoIndexes[item.id] || 0) + 1}`}
+										/>
 
-						<div className="card-image">
-							<img src={`http://localhost:3000${item.photos[0]}`} alt={item.title} />
-						</div>
+										{item.photos.length > 1 && (
+											<>
+												<button
+													type="button"
+													id="photo-prev"
+													aria-label="Previous photo"
+													onClick={(event) => {
+														event.stopPropagation();
 
-						<div className="card-body">
+														setPhotoIndexes((previous) => ({
+															...previous,
+															[item.id]:
+																((previous[item.id] || 0) - 1 + item.photos.length) %
+																item.photos.length,
+														}));
+													}}
+												>
+													&#10094; {/*for back arrow*/}
+												</button>
 
-							<div className="card-region">
-							{item.region}
+												<button
+													type="button"
+													id="photo-next"
+													aria-label="Next photo"
+													onClick={(event) => {
+														event.stopPropagation();
+
+														setPhotoIndexes((previous) => ({
+															...previous,
+															[item.id]:
+																((previous[item.id] || 0) +
+																	1) %
+																item.photos.length,
+														}));
+													}}
+												>
+													&#10095; {/*for front arrow*/}
+												</button>
+
+												<span className="photo-counter">
+													{(photoIndexes[item.id] || 0) + 1}
+													{" / "}
+													{item.photos.length}
+												</span>
+											</>
+										)}
+									</>
+								) : (
+									<div className="no-photo">No photos available</div>
+								)}
 							</div>
 
-							<div className="card-title">
-							{item.title}
-							</div>
 
-							<div className="card-meta">
-							<span>{item.bedrooms} bedroom(s)</span>
-							<span>{item.bathrooms} bathroom(s)</span>
-							<span>{item.size} sqm</span>
-							</div>
+                            <div className="card-body">
 
-							<div className="card-footer">
-							<div className="card-price">
-								Ksh {item.price}
-							</div>
+                                <div className="card-region">
+                                {item.region}
+                                </div>
 
-							
-							<button className="view-btn"
-								onClick={() => handleView(item)}
-							>
-								View
-							</button>
-							</div>
+                                <div className="card-title">
+                                {item.title}
+                                </div>
 
-						</div>
+                                <div className="card-meta">
+                                <span>{item.bedrooms} bedroom(s)</span>
+                                <span>{item.bathrooms} bathroom(s)</span>
+                                <span>{item.size} sqm</span>
+                                </div>
+
+                                <div className="card-footer">
+                                <div className="card-price">
+                                    Ksh {item.price}
+                                </div>
+
+                                
+                                <button className="view-btn"
+                                    onClick={() => handleView(item)}
+                                >
+                                    View
+                                </button>
+                                </div>
+
+                            </div>
 
 						</div>
 					))
