@@ -724,6 +724,62 @@ hr {
     color: #374151;
 }
 
+
+.edit-property-form {
+    display: flex;
+    /* grid-template-columns: repeat(2, minmax(0, 1fr)); */
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.edit-property-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #374151;
+    font-weight: 600;
+}
+
+.edit-property-form input,
+.edit-property-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font: inherit;
+    font-weight: 400;
+}
+
+.edit-property-form input:focus,
+.edit-property-form textarea:focus {
+    outline: 2px solid #93c5fd;
+    border-color: #2563eb;
+}
+
+.edit-description,
+.edit-form-actions {
+    grid-column: 1 / -1;
+}
+
+.edit-form-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+    .edit-property-form {
+        grid-template-columns: 1fr;
+    }
+
+    .edit-description,
+    .edit-form-actions {
+        grid-column: auto;
+    }
+}
+
+
 @keyframes shimmer {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }

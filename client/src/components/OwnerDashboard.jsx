@@ -5,7 +5,7 @@ function OwnerDashboard() {
     const navigate = useNavigate();
 
     // Temporary sample 
-    const [properties] = useState([
+    const [properties, setProperties] = useState([
         {
             id: 1,
             title: "Bedsitter in Roysambu",
@@ -53,87 +53,271 @@ function OwnerDashboard() {
         },
     ]);
 
-    // Track the property selected for management
+    // Track the property selected for management and edit form
     const [selectedProperty, setSelectedProperty] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editForm, setEditForm] = useState({});
+
+    // edit form
+    const handleEdit = () => {
+        setEditForm({
+            ...selectedProperty,
+            amenities: [...selectedProperty.amenities],
+        });
+
+        setIsEditing(true);
+    };
+
+    // update the edit form fields
+    const handleEditChange = (event) => {
+        const { name, value } = event.target;
+
+        setEditForm((previous) => ({
+            ...previous,
+            [name]: value,
+        }));
+    };
+
+    // save changes
+    const handleSave = (event) => {
+        event.preventDefault();
+
+        const updatedProperty = {
+            ...editForm,
+            price: Number(editForm.price),
+            bedrooms: Number(editForm.bedrooms),
+            bathrooms: Number(editForm.bathrooms),
+            size: Number(editForm.size),
+        };
+
+        setProperties((previousProperties) =>
+            previousProperties.map((property) =>
+                property.id === updatedProperty.id ? updatedProperty : property
+            )
+        );
+
+        setSelectedProperty(updatedProperty);
+        setIsEditing(false);
+    };
+
+    // Cancel editing without saving changes
+    const handleCancelEdit = () => {
+        setIsEditing(false);
+        setEditForm({});
+    };
+
+    // Return to the property list
+    const handleBackToDashboard = () => {
+        setSelectedProperty(null);
+        setIsEditing(false);
+        setEditForm({});
+    };
 
     if (selectedProperty) {
         return (
             <main className="owner-dashboard">
-                <div className="managed-property">
-                    <div className="header-details">
-                        <h2>Property Management</h2>
-                        <h3>{selectedProperty.title}</h3>
-                    </div>
+                {isEditing ? (
+                    <section className="managed-property">
+                        <h2>Edit Property</h2>
+                        <p>Update the details of your house.</p>
 
-                    <button className="dashboard-manage-button"
-                        onClick={() => setSelectedProperty(null)}
-                    >
-                        Back to Dashboard
-                    </button>
-                </div>
+                        <form className="edit-property-form" onSubmmit={handleSave}>
+                            <label>
+                                Property Title
+                                <input 
+                                    type="text"
+                                    name="title"
+                                    value={editForm.title}
+                                    onChange={handleEditChange}
+                                    required
+                                />
+                            </label>
 
-                <hr />
+                            <label>
+                                Region
+                                <input
+                                    type="text"
+                                    name="region"
+                                    value={editForm.region ?? ""}
+                                    onChange={handleEditChange}
+                                    required
+                                />
+                            </label>
 
-                <section className="managed-property-details">
-                    <p>
-                        <strong>Region</strong>{" "}
-                        {selectedProperty.region}
-                    </p>
+                            <label>
+                                Neighbourhood
+                                <input
+                                    type="text"
+                                    name="neighbourhood"
+                                    value={editForm.neighbourhood ?? ""}
+                                    onChange={handleEditChange}
+                                    required
+                                />
+                            </label>
 
-                    <p>
-                        <strong>Neighbourhood:</strong>{" "}
-                        {selectedProperty.neighbourhood}
-                    </p>
+                            <label>
+                                Price (KSh)
+                                <input
+                                    type="number"
+                                    name="price"
+                                    min="1"
+                                    value={editForm.price ?? ""}
+                                    onChange={handleEditChange}
+                                    required
+                                />
+                            </label>
 
-                    <p>
-                        <strong>Monthly rent:</strong> KSh{" "}
-                        {selectedProperty.price.toLocaleString()}
-                    </p>
+                            <label>
+                                Bedrooms
+                                <input
+                                    type="number"
+                                    name="bedrooms"
+                                    min="0"
+                                    value={editForm.bedrooms ?? ""}
+                                    onChange={handleEditChange}
+                                    required
+                                />
+                            </label>
 
-                    <p>
-                        <strong>Bedrooms:</strong>{" "}
-                        {selectedProperty.bedrooms}
-                    </p>
+                            <label>
+                                Bathrooms
+                                <input
+                                    type="number"
+                                    name="bathrooms"
+                                    min="0"
+                                    value={editForm.bathrooms ?? ""}
+                                    onChange={handleEditChange}
+                                    required
+                                />
+                            </label>
 
-                    <p>
-                        <strong>Bathrooms:</strong>{" "}
-                        {selectedProperty.bathrooms}
-                    </p>
+                            <label>
+                                Size (sqm)
+                                <input
+                                    type="number"
+                                    name="size"
+                                    min="1"
+                                    value={editForm.size ?? ""}
+                                    onChange={handleEditChange}
+                                    required
+                                />
+                            </label>
 
-                    <p>
-                        <strong>Size:</strong> 
-                        {selectedProperty.size} sqm
-                    </p>
+                            <label>
+                                Phone Number
+                                <input
+                                    type="tel"
+                                    name="phone"
+                                    value={editForm.phone ?? ""}
+                                    onChange={handleEditChange}
+                                    required
+                                />
+                            </label>
 
-                    <p>
-                        <strong>Date posted:</strong>{" "}
-                        {selectedProperty.dateAdded}
-                    </p>
+                            <label className="edit-description">
+                                Description
+                                <textarea
+                                    name="description"
+                                    value={editForm.description ?? ""}
+                                    onChange={handleEditChange}
+                                    rows={5}
+                                    required
+                                />
+                            </label>
 
-                    <p>
-                        <strong>Description:</strong>{" "}
-                        {selectedProperty.description}
-                    </p>
+                            <div className="edit-form-actions">
+                                <button
+                                    type="submit"
+                                    className="dashboard-post-button"
+                                >
+                                    Save Changes
+                                </button>
 
-                    <p>
-                        <strong>Amenities:</strong>{" "}
-                        {selectedProperty.amenities.join(", ")}
-                    </p>
+                                <button
+                                    className="dashboard-manage-button"
+                                    onClick={handleCancelEdit}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+                ) : (
+                    <> 
+                        <div className="managed-property">
+                            <div className="header-details">
+                                <h2>Property Management</h2>
+                                <h3>{selectedProperty.title}</h3>
+                            </div>
 
-                    <p>
-                        <strong>Contact:</strong>{" "}
-                        {selectedProperty.phone}
-                    </p>
-                </section>
+                            <button className="dashboard-manage-button"
+                                onClick={handleBackToDashboard}
+                            >
+                                Back to Dashboard
+                            </button>
+                        </div>
 
-                <button className="dashboard-post-button"
-                    onClick={() =>
-                        alert("Property editing will be added next.")
-                    }
-                >
-                    Edit Property
-                </button>
-                
+                        <hr />
+
+                        <section className="managed-property-details">
+                            <p>
+                                <strong>Region</strong>{" "}
+                                {selectedProperty.region}
+                            </p>
+
+                            <p>
+                                <strong>Neighbourhood:</strong>{" "}
+                                {selectedProperty.neighbourhood}
+                            </p>
+
+                            <p>
+                                <strong>Monthly rent:</strong> KSh{" "}
+                                {selectedProperty.price.toLocaleString()}
+                            </p>
+
+                            <p>
+                                <strong>Bedrooms:</strong>{" "}
+                                {selectedProperty.bedrooms}
+                            </p>
+
+                            <p>
+                                <strong>Bathrooms:</strong>{" "}
+                                {selectedProperty.bathrooms}
+                            </p>
+
+                            <p>
+                                <strong>Size:</strong> 
+                                {selectedProperty.size} sqm
+                            </p>
+
+                            <p>
+                                <strong>Date posted:</strong>{" "}
+                                {selectedProperty.dateAdded}
+                            </p>
+
+                            <p>
+                                <strong>Description:</strong>{" "}
+                                {selectedProperty.description}
+                            </p>
+
+                            <p>
+                                <strong>Amenities:</strong>{" "}
+                                {selectedProperty.amenities.join(", ")}
+                            </p>
+
+                            <p>
+                                <strong>Contact:</strong>{" "}
+                                {selectedProperty.phone}
+                            </p>
+                        </section>
+
+                        <button className="dashboard-post-button"
+                            onClick={handleEdit}
+                        >
+                            Edit Property
+                        </button>
+                    </>
+                )}    
             </main>
         );
     }
