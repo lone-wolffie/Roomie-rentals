@@ -56,14 +56,6 @@ function OwnerDashboard() {
     // Track the property selected for management
     const [selectedProperty, setSelectedProperty] = useState(null);
 
-    // const pending = properties.filter(
-    //     (property) => property.status === "Pending"
-    // ).length;
-
-    // const approved = properties.filter(
-    //     (property) => property.status === "Approved"
-    // ).length;
-
     if (selectedProperty) {
         return (
             <main className="owner-dashboard">
