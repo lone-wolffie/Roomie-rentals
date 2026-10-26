@@ -17,7 +17,7 @@ function Navbar() {
           <a href="#listings">Browse</a>
           <Link to="/post-house">Post a House</Link>
 
-          <Link to="/login" className="btn-admin">
+          <Link to="/login" className="admin-btn">
             Admin
           </Link>
         </div>

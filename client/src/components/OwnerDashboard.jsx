@@ -121,7 +121,7 @@ function OwnerDashboard() {
                         <h2>Edit Property</h2>
                         <p>Update the details of your house.</p>
 
-                        <form className="edit-property-form" onSubmmit={handleSave}>
+                        <form className="edit-property-form" onSubmit={handleSave}>
                             <label>
                                 Property Title
                                 <input 
@@ -234,6 +234,7 @@ function OwnerDashboard() {
                                 </button>
 
                                 <button
+                                    type="button"
                                     className="dashboard-manage-button"
                                     onClick={handleCancelEdit}
                                 >
@@ -255,6 +256,12 @@ function OwnerDashboard() {
                             >
                                 Back to Dashboard
                             </button>
+
+                            <button className="dashboard-post-button"
+                                onClick={handleEdit}
+                            >
+                                Edit Property
+                            </button>
                         </div>
 
                         <hr />
@@ -271,7 +278,7 @@ function OwnerDashboard() {
                             </p>
 
                             <p>
-                                <strong>Monthly rent:</strong> KSh{" "}
+                                <strong>Price:</strong> KSh{" "}
                                 {selectedProperty.price.toLocaleString()}
                             </p>
 
@@ -310,12 +317,6 @@ function OwnerDashboard() {
                                 {selectedProperty.phone}
                             </p>
                         </section>
-
-                        <button className="dashboard-post-button"
-                            onClick={handleEdit}
-                        >
-                            Edit Property
-                        </button>
                     </>
                 )}    
             </main>
