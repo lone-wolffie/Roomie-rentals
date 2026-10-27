@@ -776,7 +776,7 @@ hr {
     min-width: 0;
     color: var(--text);
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .owner-dashboard .edit-property-form input, .owner-dashboard .edit-property-form textarea {
@@ -800,6 +800,66 @@ hr {
     justify-content: space-between;
     align-items: center;
     padding-top: 4px;
+}
+
+.owner-dashboard .edit-amenities {
+    grid-column: 1 / -1;
+    padding: 20px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.owner-dashboard .edit-amenities-title {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.owner-dashboard .edit-amenities p {
+    display: flex;
+    margin-bottom: 16px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.owner-dashboard .edit-amenities-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.owner-dashboard .edit-amenities-options .edit-amenity-option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 11px 12px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.owner-dashboard .edit-amenities-options .edit-amenity-option:has(input:checked) {
+    background: #eef6f0;
+    border-color: var(--green);
+    color: var(--green-dark);
+}
+
+.owner-dashboard .edit-amenities-options .edit-amenity-option input {
+    width: 17px;
+    height: 17px;
+    min-height: auto;
+    flex-shrink: 0;
+    margin: 0;
+    accent-color: var(--green);
+    cursor: pointer;
 }
 
 /* responsive */
@@ -873,5 +933,8 @@ hr {
     }
     .owner-dashboard .managed-property:has(.edit-property-form) {
         padding: 22px 18px;
+    }
+    .owner-dashboard .edit-amenities-options {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }

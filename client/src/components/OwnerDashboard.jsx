@@ -4,6 +4,20 @@ import { useState } from "react";
 function OwnerDashboard() {
     const navigate = useNavigate();
 
+    
+const availableAmenities = [
+    "Water",
+    "Electricity",
+    "Parking",
+    "Security",
+    "Wi-Fi",
+    "Water 24hr",
+    "Furnished",
+    "Borehole",
+    "Garbage Collection",
+];
+
+
     // Temporary sample 
     const [properties, setProperties] = useState([
         {
@@ -224,6 +238,38 @@ function OwnerDashboard() {
                                     required
                                 />
                             </label>
+                            
+                            <div className="edit-amenities">
+                                <span className="edit-amenities-title">Amenities</span>
+
+                                <p>Select all amenities available at this property.</p>
+
+                                <div className="edit-amenities-options">
+                                    {availableAmenities.map((amenity) => (
+                                        <label className="edit-amenity-option" key={amenity}>
+                                            <input
+                                                type="checkbox"
+                                                checked={(editForm.amenities ?? []).includes(amenity)}
+                                                onChange={(event) => {
+                                                    const isChecked = event.target.checked;
+
+                                                    setEditForm((previous) => ({
+                                                        ...previous,
+                                                        amenities: isChecked
+                                                            ? [...(previous.amenities ?? []), amenity]
+                                                            : (previous.amenities ?? []).filter(
+                                                                (item) => item !== amenity
+                                                            ),
+                                                    }));
+                                                }}
+                                            />
+
+                                            <span>{amenity}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+
 
                             <div className="edit-form-actions">
                                 <button
