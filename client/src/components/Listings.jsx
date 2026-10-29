@@ -2,6 +2,8 @@
 import PropertyDetails from "./PropertyDetails.jsx";
 import { useState, useEffect} from "react";
 
+import { API_URL } from "../config";
+
 function Listings({ filters, sortBy }) {
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -9,7 +11,7 @@ function Listings({ filters, sortBy }) {
     const [photoIndexes, setPhotoIndexes] = useState({});
 
     useEffect(() => {
-		fetch("http://localhost:3000/api/properties")
+		fetch(`${API_URL}/api/properties`)
 		.then((response) => {
 			if (!response.ok) {
 			throw new Error("Failed to fetch properties");

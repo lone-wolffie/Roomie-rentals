@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../login.css";
 
+import { API_URL } from "../config";
+
 function PostHouse() {
     const navigate = useNavigate();
 
@@ -129,7 +131,7 @@ function PostHouse() {
                 formData.append("photos", photo);
             });
 
-            const response = await fetch("http://localhost:3000/api/properties", {
+            const response = await fetch(`${API_URL}/api/properties`, {
                 method: "POST",
                 body: formData
             });

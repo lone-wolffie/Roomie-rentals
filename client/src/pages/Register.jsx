@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../login.css";
 
+import { API_URL } from "../config";
+
 function Register() {
     const [fullName, setFullName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -23,7 +25,7 @@ function Register() {
         }
 
         try {
-            const response = await fetch("http://localhost:3000/api/register", {
+            const response = await fetch(`${API_URL}/api/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
