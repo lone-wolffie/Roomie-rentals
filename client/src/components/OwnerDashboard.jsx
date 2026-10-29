@@ -127,6 +127,33 @@ const availableAmenities = [
         setEditForm({});
     };
 
+    // delete a property
+    
+    const handleDeleteProperty = (propertyId) => {
+        const propertyToDelete = properties.find(
+            (property) => property.id === propertyId
+        );
+
+        if (!propertyToDelete) return;
+
+        const confirmed = window.confirm(
+            `Are you sure you want to delete "${propertyToDelete.title}"? This action cannot be undone.`
+        );
+
+        if (!confirmed) return;
+
+        setProperties((previousProperties) =>
+            previousProperties.filter(
+                (property) => property.id !== propertyId
+            )
+        );
+
+        setSelectedProperty(null);
+        setIsEditing(false);
+        setEditForm({});
+    };
+
+
     if (selectedProperty) {
         return (
             <main className="owner-dashboard">
@@ -302,11 +329,23 @@ const availableAmenities = [
                             >
                                 Back to Dashboard
                             </button>
+                        </div>
 
-                            <button className="dashboard-post-button"
+                        <div className="edit-property-actions">
+                            <button 
+                                type="button"
+                                className="dashboard-post-button"
                                 onClick={handleEdit}
                             >
                                 Edit Property
+                            </button>
+
+                            <button
+                                type="button"
+                                className="dashboard-delete-button"
+                                onClick={() => handleDeleteProperty(selectedProperty.id)}
+                            >
+                                Delete Property
                             </button>
                         </div>
 

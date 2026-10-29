@@ -31,6 +31,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 let adminListings = [];
+let listings = [];
 let users = []; // store users temporarily
 
 app.get("/", (req, res) => {
