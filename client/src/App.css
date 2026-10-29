@@ -635,7 +635,6 @@ html, body, #root {
     margin: 0;
     color: var(--text);
     font-weight: 700;
-    /* margin-left: 380px; */
 }
 
 .owner-dashboard .header-details h2 {
@@ -680,11 +679,14 @@ html, body, #root {
     background: #911007;
 }
 
-.edit-property-actions {
-    display: inline-flex;
-    align-items: flex-end;
+.owner-dashboard .edit-property-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
     gap: 12px;
-    margin: -12px 0 24px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 hr {
@@ -935,6 +937,12 @@ hr {
         width: 100%;
         justify-content: space-between;
         flex-wrap: wrap;
+    }
+    .owner-dashboard .edit-property-actions {
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 10px;
     }
     .owner-dashboard .edit-property-form {
         grid-template-columns: 1fr;
