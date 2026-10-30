@@ -119,8 +119,12 @@ app.post("/api/register", async (req, res) => {
 
         users.push(newUser);
 
+        // return user details with no password
+        const { password: savedPassword, ...userDetails } = newUser;
+
         return res.status(201).json({
             message: "Registration was successful!",
+            user: userDetails
         });
     } catch (error) {
         console.error("Registration error:", error);

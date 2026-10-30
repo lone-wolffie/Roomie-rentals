@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../login.css";
 
-import { API_URL } from "../config";
+import { API_URL } from "../config.js";
 
 function Register() {
     const [fullName, setFullName] = useState("");
@@ -47,15 +47,25 @@ function Register() {
                 }, 4000);
                 return;
             } 
-            setSuccessMessage("Registration was successful!");
 
+            // save registered user's details
+            const user = data.user;
+
+            if (!user) {
+                setErrorMessage("Account created. Please try logging in.");
+                return;
+            }
+
+            localStorage.setItem("user", JSON.stringify(user));
+            setSuccessMessage("Registration was successful!");
 
             // Navigate to the home page after successful registration
             setTimeout(() => {
-                navigate("/");
-            }, 2000);
+                navigate("/owner-dashboard");
+            }, 1500);
         } catch (error) {
-            setErrorMessage("Error during registration. Please try again:", error);
+            console.error("Registration error:", error)
+            setErrorMessage("Error during registration. Please try again.");
         }  
     };
 
