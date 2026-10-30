@@ -4,18 +4,59 @@ import { useState } from "react";
 function OwnerDashboard() {
     const navigate = useNavigate();
 
+    // display user's details on dashboard
+    const [user] = useState(() => {
+        try {
+            const savedUser = localStorage.getItem("user");
+            return savedUser ? JSON.parse(savedUser) : null;
+        } catch (error) {
+            console.error("Error retreiving user details:", error);
+            return null;
+        }
+    });
     
-const availableAmenities = [
-    "Water",
-    "Electricity",
-    "Parking",
-    "Security",
-    "Wi-Fi",
-    "Water 24hr",
-    "Furnished",
-    "Borehole",
-    "Garbage Collection",
-];
+    // log out the current user
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        navigate("/login");
+    };
+
+    // profile section
+    const profileSection = (
+        <section className="owner-profile">
+            <div className="owner-profile-info">
+                <div className="owner-profile-avatar">
+                    {user?.fullName ? user.fullName.charAt(0).toUpperCase() : "U"}
+                </div>
+
+                <div className="owner-profile-details">
+                    <h2>{user?.fullName || "User Account"}</h2>
+                    <p>{user?.email || "Email not available"}</p>
+                    <p>{user?.phoneNumber || "Phone number not available"}</p>
+                </div>
+            </div>
+
+            <button 
+                type="button"
+                className="dashboard-logout-button"
+                onClick={handleLogout}
+            >
+                Logout
+            </button>
+        </section>
+    );
+
+    const availableAmenities = [
+        "Water",
+        "Electricity",
+        "Parking",
+        "Security",
+        "Wi-Fi",
+        "Water 24hr",
+        "Furnished",
+        "Borehole",
+        "Garbage Collection",
+    ];
 
 
     // Temporary sample 
@@ -157,6 +198,7 @@ const availableAmenities = [
     if (selectedProperty) {
         return (
             <main className="owner-dashboard">
+                {profileSection}
                 {isEditing ? (
                     <section className="managed-property">
                         <h2>Edit Property</h2>
@@ -410,6 +452,7 @@ const availableAmenities = [
 
     return (
         <main className="owner-dashboard">
+            {profileSection}
             <div className="dashboard-header">
                 <div className="header-details">
                     <h2>My Properties</h2>

@@ -882,6 +882,66 @@ hr {
     cursor: pointer;
 }
 
+/* owner profile section */
+.owner-profile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 22px 26px;
+    margin-bottom: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.owner-profile-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.owner-profile-avatar {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: var(--green);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.owner-profile-details h2 {
+    margin: 0 0 6px;
+    color: var(--text);
+    font-size: 19px;
+}
+
+.owner-profile-details p {
+    margin: 3px 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.dashboard-logout-button {
+    padding: 10px 20px;
+    background: white;
+    color: #c0392b;
+    border: 1px solid #c0392b;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.dashboard-logout-button:hover {
+    background: #c0392b;
+    color: white;
+}
+
 /* responsive */
 @media (max-width: 900px) {
     .about-inner { grid-template-columns: 1fr; gap: 48px; }
@@ -963,4 +1023,11 @@ hr {
     .owner-dashboard .edit-amenities-options {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+    .owner-profile {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px;
+    }
+    .owner-profile-info { width: 100%; }
+    .dashboard-logout-button { width: 100%; }
 }
