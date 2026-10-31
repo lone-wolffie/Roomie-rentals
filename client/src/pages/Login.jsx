@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../login.css";
 
-import { API_URL } from "../config";
+import { API_URL } from "../config.js";
 
 function Login() {
     const navigate = useNavigate();
@@ -44,13 +44,16 @@ function Login() {
                 }, 3000);
                 return;
             }
+
+            localStorage.setItem("user", JSON.stringify(data.user));
             setSuccessMessage("Login was successful!");
 
             // navigate to home page
             setTimeout(() => {
-                navigate("/");
-            }, 2000);
+                navigate("/owner-dashboard");
+            }, 1500);
         } catch (error) {
+            console.error("Login error:", error);
             setErrorMessage("Error during login. Please try again.", error);
         }
 

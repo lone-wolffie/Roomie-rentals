@@ -51,10 +51,10 @@ function Register() {
             // save registered user's details
             const user = data.user;
 
-            if (!user) {
-                setErrorMessage("Account created. Please try logging in.");
-                return;
-            }
+            // if (!user) {
+            //     setErrorMessage("Account created. Please try logging in.");
+            //     return;
+            // }
 
             localStorage.setItem("user", JSON.stringify(user));
             setSuccessMessage("Registration was successful!");
