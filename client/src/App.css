@@ -888,7 +888,7 @@ hr {
     justify-content: space-between;
     align-items: center;
     gap: 20px;
-    padding: 22px 26px;
+    padding: 22px 20px;
     margin-bottom: 20px;
     background: var(--surface);
     border: 1px solid var(--border);
