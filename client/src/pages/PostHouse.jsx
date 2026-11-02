@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../login.css";
 
-import { API_URL } from "../config";
+import { API_URL } from "../config.js";
 
 function PostHouse() {
     const navigate = useNavigate();
@@ -24,14 +24,52 @@ function PostHouse() {
 
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);  
 
-    // handling form submission
+    const clearForm = () => {
+        // clear input fields after successful submission
+            setTitle("");
+            setRegion("");
+            setNeighbourhood("");
+            setType("");
+            setBedrooms("");
+            setBathrooms("");
+            setSize("");
+            setPrice("");
+            setDescription("");
+            setAmenities([]);
+            setOtherAmenity("");
+            setPhone("");
+            setPhotos([]);
+
+            if (photoInputRef.current) {
+                photoInputRef.current.value = "";
+            }
+    };
+    // handle form submission
     const handlePostHouse = async (event) => {
         event.preventDefault();
+
         setSuccessMessage("");
         setErrorMessage("");
 
-        // validating form inputs
+        // check whether a user is logged in
+        let loggedInUser = null;
+
+        try {
+            const savedUser = localStorage.getItem("user");
+            loggedInUser = savedUser ? JSON.parse(savedUser) : null;
+        } catch (error) {
+            console.error("Error reading logged-in user:", error);
+        }
+        
+        if (!loggedInUser || !loggedInUser.id) {
+            setErrorMessage("Please log in before posting a house.");
+            navigate("/login");
+            return;
+        }
+        
+        // validate form inputs
         if (!title.trim()) {
             alert("Please enter a property title.");
             return;
@@ -102,8 +140,9 @@ function PostHouse() {
             )
         ];
 
-        // creating a new property object
+        // create a new property object
         const newProperty = {
+            ownerId: loggedInUser.id,
             title: title.trim(),
             region,
             neighbourhood: neighbourhood.trim(),
@@ -115,22 +154,22 @@ function PostHouse() {
             description: description.trim(),
             amenities: finalAmenities,
             phone: phone.trim(),
-            photos
+            photos: []
         };
 
         try {
-            // sending the new property to the server
+            setIsSubmitting(true);
+
+            // send the new property to the server
             const formData = new FormData();
 
-            formData.append("property", JSON.stringify({
-                ...newProperty,
-                photos: []
-            }));
+            formData.append("property", JSON.stringify(newProperty));
 
             photos.forEach((photo) => {
                 formData.append("photos", photo);
             });
 
+            // send property to backend
             const response = await fetch(`${API_URL}/api/properties`, {
                 method: "POST",
                 body: formData
@@ -143,32 +182,16 @@ function PostHouse() {
             }
 
             setSuccessMessage("House posted successfully");
+            clearForm();
 
             setTimeout(() => {  
-                navigate("/");
+                navigate("/owner-dashboard");
             }, 2000);
         } catch (error) {
             console.error("Error posting house:", error);
             setErrorMessage("Failed to post house. Please try again.");
-        }
-
-        // clearing input fields after successful submission
-        setTitle("");
-        setRegion("");
-        setNeighbourhood("");
-        setType("");
-        setBedrooms("");
-        setBathrooms("");
-        setSize("");
-        setPrice("");
-        setDescription("");
-        setAmenities([]);
-        setOtherAmenity("");
-        setPhone("");
-        setPhotos([]);
-
-        if (photoInputRef.current) {
-            photoInputRef.current.value = "";
+        } finally {
+            setIsSubmitting(false);
         }
     }
 
@@ -183,9 +206,9 @@ function PostHouse() {
             ]);
         } else {
             setAmenities((previousAmenities) =>
-            previousAmenities.filter(
-                (amenity) => amenity !== value
-            )
+                previousAmenities.filter(
+                    (amenity) => amenity !== value
+                )
             );
         }
     };
@@ -205,10 +228,6 @@ function PostHouse() {
         setPhotos((previousPhotos) => 
             previousPhotos.filter((_, index) => index !== indexToRemove)
         );
-
-        if (photoInputRef.current) {
-            photoInputRef.current.value = "";
-        }
     };
 
     // form contents 
@@ -424,7 +443,7 @@ function PostHouse() {
                         </div>
                     )}
 
-                    <button type="submit">
+                    <button type="submit" disabled={isSubmitting}>
                         Post House
                     </button>
 

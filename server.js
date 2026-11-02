@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.static("public"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// store images of houses
+// store images of uploaded houses
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, path.join(__dirname, "uploads"));
@@ -34,6 +34,7 @@ let adminListings = [];
 let listings = [];
 let users = []; // store users temporarily
 
+// home route
 app.get("/", (req, res) => {
     res.send("Roomie Rentals API is running...");
 });
@@ -42,6 +43,12 @@ app.get("/", (req, res) => {
 app.post("/api/login", async (req, res) => {
     try {
         const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({
+                message: "Please enter your email and password."
+            });
+        }
 
         // check if user exists
         const user = users.find(
@@ -135,7 +142,7 @@ app.post("/api/register", async (req, res) => {
     }
 });
 
-// all houses route
+// all public houses route
 app.get("/api/listings", (req, res) => {
     res.json(listings);
 });
@@ -145,12 +152,52 @@ app.get("/api/properties", (req, res) => {
     res.json(adminListings);
 });
 
-// new houses for admins
-app.post("/api/properties", upload.array("photos", 10), (req, res) => { // allowing up to 10 photos to be uploaded
+// get properties for one owner
+app.get("/api/users/:userId/properties", (req, res) => {
     try {
-        console.log("Property received from admin");
+        const userId = Number(req.params.userId);
+
+        if (!Number.isInteger(userId) || userId <= 0) {
+            return res.status(400).json({
+                message: "Invalid user ID."
+            });
+        }
+
+        const ownerProperties = adminListings.filter(
+            (property) => Number(property.ownerId) === userId
+        );
+
+        return res.status(200).json(ownerProperties);
+    } catch (error) {
+        console.error("Error fetching owner's properties:", error);
+
+        return res.status(500).json({
+            message: "Failed to fetch your properties."
+        });
+    }
+});
+
+// new houses for admins
+app.post("/api/properties", upload.array("photos", 10), (req, res) => { // allow up to 10 photos to be uploaded
+    try {
+        if (!req.body.property) {
+            return res.status(400).json({
+                message: "Property details are missing."
+            });
+        }
 
         const propertyDetails = JSON.parse(req.body.property);
+        const ownerId = Number(propertyDetails.ownerId);
+
+        // confirm owner exists
+        const ownerExists = users.some((user) => user.id === ownerId);
+
+        if (!Number.isInteger(ownerId) || !ownerExists) {
+            return res.status(400).json({
+                message: "Property owner is required."
+            });
+        }
+
         const photoUrls = (req.files || []).map(
             (file) => `/uploads/${file.filename}`
         );
@@ -158,12 +205,13 @@ app.post("/api/properties", upload.array("photos", 10), (req, res) => { // allow
         const newProperty = {
             id: adminListings.length + 1,
             ...propertyDetails,
+            ownerId,
             photos: photoUrls,
+            status: "Pending",
             dateAdded: new Date().toISOString()
         };
 
         adminListings.push(newProperty);
-        console.log("New property added:", newProperty);
 
         res.status(200).json({
             message: "House added successfully",
@@ -179,11 +227,13 @@ app.post("/api/properties", upload.array("photos", 10), (req, res) => { // allow
 
 // delete house
 app.delete("/api/listings/:id", (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id, 10);
 
     listings = listings.filter(item => item.id !== id);
 
-    res.json({ message: "House deleted successfully" });
+    res.json({ 
+        message: "House deleted successfully" 
+    });
 });
 
 // server
