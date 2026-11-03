@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import { API_URL } from "../config.js";
 
 function OwnerDashboard() {
     const navigate = useNavigate();
@@ -14,7 +16,56 @@ function OwnerDashboard() {
             return null;
         }
     });
-    
+
+    const [properties, setProperties] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState("");
+
+    // Track the property selected for management and edit form
+    const [selectedProperty, setSelectedProperty] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editForm, setEditForm] = useState({});
+
+    const availableAmenities = [
+        "Parking",
+        "Generator",
+        "CCTV",
+        "Security",
+        "Balcony"
+    ];
+
+    // get properties for the logged-in owner
+    useEffect(() => {
+        const fetchOwnerProperties = async () => {
+            if (!user?.id) {
+                setIsLoading(false);
+                setErrorMessage("Please log in to view your properties.");
+                return;
+            }
+
+            try {
+                setIsLoading(true);
+                setErrorMessage("");
+
+                const response = await fetch(`${API_URL}/api/users/${user.id}/properties`);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message);
+                }
+
+                setProperties(Array.isArray(data) ? data : []);
+            } catch (error) {
+                console.error("Error fetching owner properties:", error);
+                setErrorMessage("Unable to load your properties.");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchOwnerProperties();
+    }, [user]);
+
     // log out the current user
     const handleLogout = () => {
         localStorage.removeItem("user");
@@ -46,78 +97,33 @@ function OwnerDashboard() {
         </section>
     );
 
-    const availableAmenities = [
-        "Water",
-        "Electricity",
-        "Parking",
-        "Security",
-        "Wi-Fi",
-        "Water 24hr",
-        "Furnished",
-        "Borehole",
-        "Garbage Collection",
-    ];
+    // format the date
+    const formatDate = (dateValue) => {
+        if (!dateValue) {
+            return "Date not available";
+        }
 
+        const date = new Date(dateValue);
 
-    // Temporary sample 
-    const [properties, setProperties] = useState([
-        {
-            id: 1,
-            title: "Bedsitter in Roysambu",
-            region: "Nairobi",
-            neighbourhood: "Roysambu",
-            price: 8000,
-            bedrooms: 0,
-            bathrooms: 1,
-            size: 25,
-            description: "A comfortable bedsitter in a convenient location.",
-            amenities: ["Water", "Electricity"],
-            phone: "0712345678",
-            status: "Pending",
-            dateAdded: "2026-10-15",
-        },
-        {
-            id: 2,
-            title: "One-bedroom in Kasarani",
-            region: "Nairobi",
-            neighbourhood: "Kasarani",
-            price: 12000,
-            bedrooms: 1,
-            bathrooms: 1,
-            size: 40,
-            description: "A spacious one-bedroom house near essential services.",
-            amenities: ["Water", "Parking"],
-            phone: "0723456789",
-            status: "Approved",
-            dateAdded: "2026-10-12",
-        },
-        {
-            id: 3,
-            title: "Two-bedroom in Juja",
-            region: "Kiambu",
-            neighbourhood: "Juja",
-            price: 18000,
-            bedrooms: 2,
-            bathrooms: 1,
-            size: 65,
-            description: "A two-bedroom house suitable for a small family.",
-            amenities: ["Water", "Security", "Parking"],
-            phone: "0734567890",
-            status: "Approved",
-            dateAdded: "2026-10-10",
-        },
-    ]);
+        if (Number.isNaN(date.getTime())) {
+            return "Invalid date";
+        }
 
-    // Track the property selected for management and edit form
-    const [selectedProperty, setSelectedProperty] = useState(null);
-    const [isEditing, setIsEditing] = useState(false);
-    const [editForm, setEditForm] = useState({});
+        // convert format to dd/mm/yyyy
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+
+        return `${day}/${month}/${year}`;
+    };
 
     // edit form
     const handleEdit = () => {
+        if (!selectedProperty) return;
+
         setEditForm({
             ...selectedProperty,
-            amenities: [...selectedProperty.amenities],
+            amenities: Array.isArray(selectedProperty.amenities) ? [...selectedProperty.amenities] : [],
         });
 
         setIsEditing(true);
@@ -169,7 +175,6 @@ function OwnerDashboard() {
     };
 
     // delete a property
-    
     const handleDeleteProperty = (propertyId) => {
         const propertyToDelete = properties.find(
             (property) => property.id === propertyId
@@ -406,7 +411,7 @@ function OwnerDashboard() {
 
                             <p>
                                 <strong>Price:</strong> KSh{" "}
-                                {selectedProperty.price.toLocaleString()}
+                                {Number(selectedProperty.price || 0).toLocaleString()}
                             </p>
 
                             <p>
@@ -426,7 +431,7 @@ function OwnerDashboard() {
 
                             <p>
                                 <strong>Date posted:</strong>{" "}
-                                {selectedProperty.dateAdded}
+                                {formatDate(selectedProperty.dateAdded)}
                             </p>
 
                             <p>
@@ -436,7 +441,7 @@ function OwnerDashboard() {
 
                             <p>
                                 <strong>Amenities:</strong>{" "}
-                                {selectedProperty.amenities.join(", ")}
+                                {Array.isArray(selectedProperty.amenities) ? selectedProperty.amenities.join(", "): "Not specified"}
                             </p>
 
                             <p>
@@ -471,7 +476,16 @@ function OwnerDashboard() {
             <hr />
 
             <section className="dashboard-properties">
-                {properties.length > 0 ? (
+                {isLoading ? (
+                    <div className="dashboard-empty">
+                        <p>Loading your properties...</p>
+                    </div>
+                ) : errorMessage ? (
+                    <div className="dashboard-empty">
+                        <h3>Unable to load properties</h3>
+                        <p>{errorMessage}</p>
+                    </div>
+                ) : properties.length > 0 ? (
                     <div className="dashboard-property-list">
                         {properties.map((property) => (
                             <div className="dashboard-property-card" key={property.id}>
@@ -480,12 +494,12 @@ function OwnerDashboard() {
 
                                     <p>
                                         {property.region} · KSh{" "}
-                                        {property.price.toLocaleString()}
+                                        {Number(property.price || 0).toLocaleString()}
                                         /month
                                     </p>
 
                                     <small>
-                                        Posted on {property.dateAdded}
+                                        Posted on {formatDate(property.dateAdded)}
                                     </small>
                                 </div>
 
