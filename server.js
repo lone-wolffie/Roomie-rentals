@@ -225,6 +225,55 @@ app.post("/api/properties", upload.array("photos", 10), (req, res) => { // allow
     } 
 });
 
+// update an existing property
+app.put("/api/properties/:id", (req, res) => {
+    try {
+        const propertyId = Number(req.params.id);
+
+        if (!Number.isInteger(propertyId) || propertyId <= 0) {
+            return res.status(400).json({
+                message: "Invalid property ID."
+            });
+        }
+
+        const propertyIndex = adminListings.findIndex(
+            (property) => Number(property.id) === propertyId
+        );
+
+        if (propertyIndex === -1) {
+            return res.status(404).json({
+                message: "Property not found."
+            });
+        }
+
+        const existingProperty = adminListings[propertyIndex];
+        const updatedDetails = req.body;
+
+        const updatedProperty = {
+            ...existingProperty,
+            ...updatedDetails,
+            id: existingProperty.id,
+            ownerId: existingProperty.ownerId,
+            photos: existingProperty.photos,
+            status: existingProperty.status,
+            dateAdded: existingProperty.dateAdded
+        };
+
+        adminListings[propertyIndex] = updatedProperty;
+
+        return res.status(200).json({
+            message: "Property updated successfully.",
+            data: updatedProperty
+        });
+    } catch (error) {
+        console.error("Error updating property:", error);
+
+        return res.status(500).json({
+            message: "Failed to update property."
+        });
+    }
+});
+
 // delete house
 app.delete("/api/listings/:id", (req, res) => {
     const id = parseInt(req.params.id, 10);

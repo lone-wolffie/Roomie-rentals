@@ -19,6 +19,7 @@ function OwnerDashboard() {
 
     const [properties, setProperties] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
     // Track the property selected for management and edit form
@@ -140,8 +141,13 @@ function OwnerDashboard() {
     };
 
     // save changes
-    const handleSave = (event) => {
+    const handleSave = async (event) => {
         event.preventDefault();
+
+        if (!editForm.id) {
+            alert("Property ID is missing");
+            return;
+        }
 
         const updatedProperty = {
             ...editForm,
@@ -151,14 +157,43 @@ function OwnerDashboard() {
             size: Number(editForm.size),
         };
 
-        setProperties((previousProperties) =>
-            previousProperties.map((property) =>
-                property.id === updatedProperty.id ? updatedProperty : property
-            )
-        );
+        try {
+            setIsSaving(true);
 
-        setSelectedProperty(updatedProperty);
-        setIsEditing(false);
+            const response = await fetch(`${API_URL}/api/properties/${updatedProperty.id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(updatedProperty),
+                }
+
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message);
+            }
+
+            // use property returned by backend
+            const savedProperty = data.data;
+
+            setProperties((previousProperties) =>
+                previousProperties.map((property) =>
+                    property.id === updatedProperty.id ? updatedProperty : property
+                )
+            );
+
+            setSelectedProperty(savedProperty);
+            setIsEditing(false);
+            setEditForm({});
+        } catch (error) {
+            console.error("Error updating property:", error);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     // Cancel editing without saving changes
@@ -349,6 +384,7 @@ function OwnerDashboard() {
                                 <button
                                     type="submit"
                                     className="dashboard-post-button"
+                                    disabled={isSaving}
                                 >
                                     Save Changes
                                 </button>
