@@ -210,9 +210,9 @@ function OwnerDashboard() {
     };
 
     // delete a property
-    const handleDeleteProperty = (propertyId) => {
+    const handleDeleteProperty = async (propertyId) => {
         const propertyToDelete = properties.find(
-            (property) => property.id === propertyId
+            (property) => Number(property.id) === Number(propertyId)
         );
 
         if (!propertyToDelete) return;
@@ -223,17 +223,32 @@ function OwnerDashboard() {
 
         if (!confirmed) return;
 
-        setProperties((previousProperties) =>
-            previousProperties.filter(
-                (property) => property.id !== propertyId
-            )
-        );
+        try {
+            const response = await fetch(`${API_URL}/api/properties/${propertyId}`,
+                {
+                    method: "DELETE",
+                }
+            );
 
-        setSelectedProperty(null);
-        setIsEditing(false);
-        setEditForm({});
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message);
+            }
+
+            setProperties((previousProperties) =>
+                previousProperties.filter(
+                    (property) => property.id !== propertyId
+                )
+            );
+
+            setSelectedProperty(null);
+            setIsEditing(false);
+            setEditForm({});
+        } catch (error) {
+            console.error("Error deleting property:", error);
+        }
     };
-
 
     if (selectedProperty) {
         return (
@@ -400,7 +415,8 @@ function OwnerDashboard() {
                         </form>
                     </section>
                 ) : (
-                    <> 
+                    
+                    <section className="dashboard-card">
                         <div className="managed-property">
                             <div className="header-details">
                                 <h2>Property Management</h2>
@@ -485,7 +501,7 @@ function OwnerDashboard() {
                                 {selectedProperty.phone}
                             </p>
                         </section>
-                    </>
+                    </section>
                 )}    
             </main>
         );
@@ -494,79 +510,81 @@ function OwnerDashboard() {
     return (
         <main className="owner-dashboard">
             {profileSection}
-            <div className="dashboard-header">
-                <div className="header-details">
-                    <h2>My Properties</h2>
-                    <p>Review the status of your house listings.</p>
+            <section className="dashboard-card">
+                <div className="dashboard-header">
+                    <div className="header-details">
+                        <h2>My Properties</h2>
+                        <p>Review the status of your house listings.</p>
+                    </div>
+
+                    <button
+                        className="dashboard-post-button"
+                        onClick={() => {
+                            navigate("/post-house");
+                        }}
+                    >
+                        Post a House
+                    </button>
                 </div>
+                <hr />
 
-                <button
-                    className="dashboard-post-button"
-                    onClick={() => {
-                        navigate("/post-house");
-                    }}
-                >
-                    Post a House
-                </button>
-            </div>
-            <hr />
+                <section className="dashboard-properties">
+                    {isLoading ? (
+                        <div className="dashboard-empty">
+                            <p>Loading your properties...</p>
+                        </div>
+                    ) : errorMessage ? (
+                        <div className="dashboard-empty">
+                            <h3>Unable to load properties</h3>
+                            <p>{errorMessage}</p>
+                        </div>
+                    ) : properties.length > 0 ? (
+                        <div className="dashboard-property-list">
+                            {properties.map((property) => (
+                                <div className="dashboard-property-card" key={property.id}>
+                                    <div className="dashboard-property-info">
+                                        <h3>{property.title}</h3>
 
-            <section className="dashboard-properties">
-                {isLoading ? (
-                    <div className="dashboard-empty">
-                        <p>Loading your properties...</p>
-                    </div>
-                ) : errorMessage ? (
-                    <div className="dashboard-empty">
-                        <h3>Unable to load properties</h3>
-                        <p>{errorMessage}</p>
-                    </div>
-                ) : properties.length > 0 ? (
-                    <div className="dashboard-property-list">
-                        {properties.map((property) => (
-                            <div className="dashboard-property-card" key={property.id}>
-                                <div className="dashboard-property-info">
-                                    <h3>{property.title}</h3>
+                                        <p>
+                                            {property.region} · KSh{" "}
+                                            {Number(property.price || 0).toLocaleString()}
+                                            /month
+                                        </p>
 
-                                    <p>
-                                        {property.region} · KSh{" "}
-                                        {Number(property.price || 0).toLocaleString()}
-                                        /month
-                                    </p>
+                                        <small>
+                                            Posted on {formatDate(property.dateAdded)}
+                                        </small>
+                                    </div>
 
-                                    <small>
-                                        Posted on {formatDate(property.dateAdded)}
-                                    </small>
+                                    <div className="dashboard-property-actions">
+                                        <span
+                                            className={`property-status ${
+                                                property.status.toLowerCase()
+                                            }`}
+                                        >
+                                            {property.status}
+                                        </span>
+
+                                        <button
+                                            className="dashboard-manage-button"
+                                            onClick={() => setSelectedProperty(property)}
+                                        >
+                                            Manage
+                                        </button>
+                                    </div>
                                 </div>
-
-                                <div className="dashboard-property-actions">
-                                    <span
-                                        className={`property-status ${
-                                            property.status.toLowerCase()
-                                        }`}
-                                    >
-                                        {property.status}
-                                    </span>
-
-                                    <button
-                                        className="dashboard-manage-button"
-                                        onClick={() => setSelectedProperty(property)}
-                                    >
-                                        Manage
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="dashboard-empty">
-                        <h3>No properties yet</h3>
-                        <p>
-                            Post your first house to start managing your
-                            listings.
-                        </p>
-                    </div>
-                )}
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="dashboard-empty">
+                            <h3>No properties yet</h3>
+                            <p>
+                                Post your first house to start managing your
+                                listings.
+                            </p>
+                        </div>
+                    )}
+                </section>
             </section>
         </main>
     );

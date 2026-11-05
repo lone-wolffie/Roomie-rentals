@@ -696,17 +696,35 @@ hr {
     margin: 20px 0; 
 }
 
+.owner-dashboard .dashboard-card {
+    padding: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    /* box-shadow: var(--shadow); */
+}
+/* .owner-dashboard .dashboard-property-list {
+    display: grid;
+    gap: 16px;
+} */
+
 .dashboard-property-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 20px;
-    padding: 20px;
-    border-bottom: 2px solid var(--gold);
+    padding: 18px 20px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
     transition: transform 0.3s ease;
 }
 
-.dashboard-property-card:hover { transform: translateY(-10px); }
+.dashboard-property-card:hover {
+    border-color: var(--green);
+    box-shadow: var(--shadow);
+    transform: translateY(-10px);
+}
 
 .dashboard-property-info h3 { margin: 0 0 8px; }
 

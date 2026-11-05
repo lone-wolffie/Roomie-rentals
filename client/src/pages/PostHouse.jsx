@@ -323,7 +323,7 @@ function PostHouse() {
                     <label>Phone Number</label>
                     <input
                         type="tel"
-                        placeholder="e.g. 0712345678"
+                        placeholder="e.g. +254712345678"
                         value={phone}
                         onChange={(event) => setPhone(event.target.value)}
                     />

@@ -274,6 +274,41 @@ app.put("/api/properties/:id", (req, res) => {
     }
 });
 
+// delete an owner property
+app.delete("/api/properties/:id", (req, res) => {
+    try {
+        const propertyId = Number(req.params.id);
+
+        if (!Number.isInteger(propertyId) || propertyId <= 0) {
+            return res.status(400).json({
+                message: "Invalid property ID."
+            });
+        }
+
+        const propertyIndex = adminListings.findIndex(
+            (property) => Number(property.id) === propertyId
+        );
+
+        if (propertyIndex === -1) {
+            return res.status(404).json({
+                message: "Property not found."
+            });
+        }
+
+        adminListings.splice(propertyIndex, 1);
+
+        return res.status(200).json({
+            message: "Property deleted successfully."
+        });
+    } catch (error) {
+        console.error("Error deleting property:", error);
+
+        return res.status(500).json({
+            message: "Failed to delete property."
+        });
+    }
+});
+
 // delete house
 app.delete("/api/listings/:id", (req, res) => {
     const id = parseInt(req.params.id, 10);
