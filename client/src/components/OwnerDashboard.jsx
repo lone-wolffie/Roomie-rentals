@@ -21,6 +21,7 @@ function OwnerDashboard() {
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
 
     // Track the property selected for management and edit form
     const [selectedProperty, setSelectedProperty] = useState(null);
@@ -126,7 +127,8 @@ function OwnerDashboard() {
             ...selectedProperty,
             amenities: Array.isArray(selectedProperty.amenities) ? [...selectedProperty.amenities] : [],
         });
-
+        setErrorMessage("");
+        setSuccessMessage("");
         setIsEditing(true);
     };
 
@@ -145,7 +147,8 @@ function OwnerDashboard() {
         event.preventDefault();
 
         if (!editForm.id) {
-            alert("Property ID is missing");
+            setErrorMessage("Property ID is missing");
+            setSuccessMessage("");
             return;
         }
 
@@ -159,6 +162,8 @@ function OwnerDashboard() {
 
         try {
             setIsSaving(true);
+            setErrorMessage("");
+            setSuccessMessage("");
 
             const response = await fetch(`${API_URL}/api/properties/${updatedProperty.id}`,
                 {
@@ -182,15 +187,21 @@ function OwnerDashboard() {
 
             setProperties((previousProperties) =>
                 previousProperties.map((property) =>
-                    property.id === updatedProperty.id ? updatedProperty : property
+                    Number(property.id) === Number(savedProperty.id) ? savedProperty : property
                 )
             );
 
             setSelectedProperty(savedProperty);
             setIsEditing(false);
             setEditForm({});
+
+            setSuccessMessage("Property updated successfully.");
+            setTimeout(() => {
+                setSuccessMessage("");
+            }, 2500);
         } catch (error) {
             console.error("Error updating property:", error);
+            setErrorMessage("Unable to update property. Please try again.");
         } finally {
             setIsSaving(false);
         }
@@ -200,6 +211,7 @@ function OwnerDashboard() {
     const handleCancelEdit = () => {
         setIsEditing(false);
         setEditForm({});
+        setErrorMessage("");
     };
 
     // Return to the property list
@@ -224,6 +236,9 @@ function OwnerDashboard() {
         if (!confirmed) return;
 
         try {
+            setErrorMessage("");
+            setSuccessMessage("");
+
             const response = await fetch(`${API_URL}/api/properties/${propertyId}`,
                 {
                     method: "DELETE",
@@ -238,15 +253,20 @@ function OwnerDashboard() {
 
             setProperties((previousProperties) =>
                 previousProperties.filter(
-                    (property) => property.id !== propertyId
+                    (property) => Number(property.id) !== Number(propertyId)
                 )
             );
 
             setSelectedProperty(null);
             setIsEditing(false);
             setEditForm({});
+
+            setErrorMessage("");
+            setSuccessMessage("Property deleted successfully.");
         } catch (error) {
             console.error("Error deleting property:", error);
+            setErrorMessage("Unable to delete property. Please try again.");
+            setSuccessMessage("");
         }
     };
 
@@ -254,6 +274,7 @@ function OwnerDashboard() {
         return (
             <main className="owner-dashboard">
                 {profileSection}
+
                 {isEditing ? (
                     <section className="managed-property">
                         <h2>Edit Property</h2>
@@ -501,6 +522,19 @@ function OwnerDashboard() {
                                 {selectedProperty.phone}
                             </p>
                         </section>
+
+                        {successMessage && (
+                            <div className="success-message" role="status">
+                                {successMessage}
+                            </div>
+                        )}
+
+                        {errorMessage && (
+                            <div className="error-message" role="alert">
+                                {errorMessage}
+                            </div>
+                        )}
+
                     </section>
                 )}    
             </main>
