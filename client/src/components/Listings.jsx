@@ -2,7 +2,7 @@
 import PropertyDetails from "./PropertyDetails.jsx";
 import { useState, useEffect} from "react";
 
-import { API_URL } from "../config";
+import { API_URL, IMAGE_URL } from "../config.js";
 
 function Listings({ filters, sortBy }) {
     const [listings, setListings] = useState([]);
@@ -101,9 +101,7 @@ function Listings({ filters, sortBy }) {
 								{Array.isArray(item.photos) && item.photos.length > 0 ? ( 
 									<>
 										<img
-											src={`http://localhost:3000${
-												item.photos[photoIndexes[item.id] || 0]
-											}`}
+											src={`${IMAGE_URL}${item.photos[photoIndexes[item.id] || 0]}`}
 											alt={`${item.title} - Photo ${(photoIndexes[item.id] || 0) + 1}`}
 										/>
 

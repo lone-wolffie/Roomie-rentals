@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { IMAGE_URL } from "../config.js";
 function PropertyDetails({ property, onBack }) {
     // track the photo being displayed
     const [photoIndex, setPhotoIndex] = useState(0);
@@ -40,7 +40,7 @@ function PropertyDetails({ property, onBack }) {
                 {hasPhotos ? (
                     <>
                         <img
-                            src={`http://localhost:3000${photos[photoIndex]}`}
+                            src={`${IMAGE_URL}${photos[photoIndex]}`}
                             alt={`${property.title} - Photo ${photoIndex + 1}`}
                         />
 
