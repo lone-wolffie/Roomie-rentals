@@ -46,11 +46,14 @@ html, body, #root {
 }
 
 .nav-inner {
+    max-width: 1280px;
     margin: 0 auto;
     padding: 0 24px;
     height: 68px;
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    gap: 20px;
 }
 
 .logo {
@@ -77,7 +80,7 @@ html, body, #root {
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: clamp(14px, 2.5vw, 32px);
 }
 
 .nav-links a {
@@ -115,12 +118,15 @@ html, body, #root {
 
 .hamburger {
     display: none;
-    background: none;
+    appearance: none;
+    background: transparent !important;
     border: none;
     font-size: 1.4rem;
     cursor: pointer;
     color: var(--text);
 }
+
+.mobile-nav { display: none; }
 
 /* intro */
 .hero {
@@ -142,7 +148,7 @@ html, body, #root {
 
 .hero-title {
     font-family: 'Playfair Display', serif;
-    font-size: 3.8rem;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
     font-weight: 900;
     color: white;
     line-height: 1.05;
@@ -229,9 +235,9 @@ html, body, #root {
 .filter-bar {
     background: white;
     border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 68px;
-    z-index: 90;
+    position: relative;
+    top: auto;
+    z-index: auto;
 }
 
 .filter-inner {
@@ -285,7 +291,7 @@ html, body, #root {
 
 .listings-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
     gap: 24px;
 }
 
@@ -471,7 +477,7 @@ html, body, #root {
 /* bedrooms, bathrooms and size */
 .property-details-data {
     display: flex;
-    gap: 90px;
+    gap: 20px 40px;
     flex-wrap: wrap;
     padding: 18px 0;
     border-top: 1px solid var(--border);
@@ -675,9 +681,7 @@ html, body, #root {
     color: white;
 }
 
-.owner-dashboard .dashboard-delete-button:hover {
-    background: #911007;
-}
+.owner-dashboard .dashboard-delete-button:hover { background: #911007; }
 
 .owner-dashboard .edit-property-actions {
     display: flex;
@@ -701,18 +705,14 @@ hr {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    /* box-shadow: var(--shadow); */
 }
-/* .owner-dashboard .dashboard-property-list {
-    display: grid;
-    gap: 16px;
-} */
 
 .dashboard-property-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+    margin-bottom: 20px;
     padding: 18px 20px;
     background: var(--bg);
     border: 1px solid var(--border);
@@ -797,7 +797,9 @@ hr {
 }
 
 .owner-dashboard .managed-property:has(.edit-property-form) h2 {
-    margin-left: 450px;
+    /* margin-left: 450px; */
+    margin-left: 0;
+    text-align: center;
 }
 
 .owner-dashboard .edit-property-form {
@@ -961,12 +963,9 @@ hr {
 }
 
 .success-message {
-    /* background: #e8f7ed; */
     color: #207443;
-    /* border: 1px solid #b9e5c8; */
     padding: 12px 16px;
     margin: 15px 0;
-    /* border-radius: 6px; */
     font-size: 14px;
 }
 
@@ -980,67 +979,176 @@ hr {
     font-size: 14px;
 }
 
-/* responsive */
+/* tablets */
 @media (max-width: 900px) {
-    .about-inner { grid-template-columns: 1fr; gap: 48px; }
-    .about-visual { display: none; }
-    .footer-inner { grid-template-columns: 1fr 1fr; }
+    .search-row {
+        display: flex;
+        align-items: stretch;
+        gap: 14px;
+    }
+    .search-field {
+        min-width: 0;
+        flex: 1;
+    }
+    .search-field select {
+        width: 100%;
+        min-width: 0;
+    }
+    .search-btn {
+        flex: 0 0 auto;
+        align-self: stretch;
+    }
+    .footer-inner { 
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 20px;
+        align-items: start;
+    }
+    .property-details-data { gap: 16px 28px; }
+    .property-details-content { padding: 26px; }
+    .owner-dashboard .dashboard-card { padding: 22px; }
 }
 
+/* mobile phones */
 @media (max-width: 700px) {
+     .nav {
+        position: relative;
+        z-index: 1000;
+    }
     .nav-links { display: none; }
-    .hamburger { display: block; }
-    .hero { padding: 60px 16px 80px; }
-    .hero-title { font-size: 2.6rem; }
-    .search-row { flex-direction: column; }
-    .search-field { min-width: 100%; }
-    .search-btn { display: block; min-width: 100%; }
-    .listings-grid { grid-template-columns: 1fr; }
-    .footer-inner { grid-template-columns: 1fr; gap: 32px; }
-    .owner-dashboard { padding: 24px 16px; }
-    .dashboard-header {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-    .dashboard-header h1 { font-size: 26px; }
-    .dashboard-stats {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
-    .dashboard-property-card {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-    .dashboard-property-actions {
-        width: 100%;
+    .nav-inner { 
+        position: relative;
+        display: flex;
+        align-items: center;
         justify-content: space-between;
+        padding: 0 16px; }
+    .hamburger { 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border: none;
+        border-radius: 8px;
+        background: transparent !important;
+        color: inherit;
+        font-size: 28px;
+        cursor: pointer;
+        line-height: 1;
     }
-    .owner-dashboard {
+    .mobile-nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        padding: 8px 16px 18px;
+        gap: 4px;
+        background: white;
+        border-top: 1px solid var(--border);
+    }
+    .mobile-nav.open {
+        display: flex;
+    }
+
+    .mobile-nav a {
+        display: block;
+        width: 100%;
+        padding: 14px 12px;
+        color: #333333;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+
+    .mobile-nav a:hover {
+        background: #f5f5f5;
+    }
+    .hero { 
+        padding: 60px 16px 80px; 
+        min-height: auto;
+    }
+    .hero-title { font-size: clamp(2rem, 8vw, 2.6rem); }
+    .hero-sub {
+        font-size: 1rem;
+        margin-bottom: 30px;
+    }
+    .search-card { padding: 18px; }
+    .search-row { flex-direction: column; gap: 18px; }
+    .search-field, .search-field select, .search-btn { 
+        width: 100%; 
+        max-width: 100%; 
+        min-width: 0;
+    }
+    .search-row {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
+    }
+    .search-btn { 
+        display: block;
+        margin: 0;
+    }
+    .filter-inner {
+        padding: 14px 16px;
+        align-items: flex-start;
+    }
+    .filter-right {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .listings-section { padding: 24px 16px 48px; }
+    .listings-grid { grid-template-columns: minmax(0, 1fr); }
+    .property-details {
         margin: 24px auto;
         padding: 0 16px 40px;
     }
-    .owner-dashboard .dashboard-header,
-    .owner-dashboard .managed-property {
+    .property-details-image { height: clamp(220px, 65vw, 350px); }
+    .property-details-content { padding: 20px; }
+    .property-details-data { gap: 12px 20px; }
+    .property-details-price { font-size: 1.5rem; }
+    .footer { padding: 44px 20px 0; }
+    .footer-inner { 
+        grid-template-columns: minmax(0, 1fr);
+        gap: 28px; }
+    .owner-dashboard {  
+        margin: 24px auto;
+        padding: 0 16px 40px;
+    }
+    .owner-dashboard .dashboard-card { padding: 18px; }
+    .owner-dashboard .dashboard-header, .owner-dashboard .managed-property, .owner-dashboard .dashboard-property-card {
         align-items: flex-start;
         flex-direction: column;
     }
     .owner-dashboard .dashboard-header { gap: 18px; }
-    .owner-dashboard .dashboard-property-card {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 18px;
-        padding: 20px;
-    }
     .owner-dashboard .dashboard-property-actions {
         width: 100%;
         justify-content: space-between;
         flex-wrap: wrap;
     }
+    .owner-dashboard .dashboard-property-card {
+        gap: 18px;
+        padding: 20px;
+    }
     .owner-dashboard .edit-property-actions {
+        display: flex;
         flex-direction: row;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 10px;
+        justify-content: flex-start;
+        align-items: stretch;
+        flex-wrap: wrap;
+        gap: 12px;
+        width: 100%;
+        margin: 20px 0;
+    }
+    .owner-dashboard .edit-property-actions button {
+        flex: 1 1 140px;
+        min-width: 0;
+        width: auto;
+        margin: 0;
+        padding: 12px 16px;
+        box-sizing: border-box;
+        text-align: center;
     }
     .owner-dashboard .edit-property-form {
         grid-template-columns: 1fr;
@@ -1055,12 +1163,8 @@ hr {
         grid-template-columns: 1fr;
         gap: 4px;
     }
-    .owner-dashboard .managed-property:has(.edit-property-form) {
-        padding: 22px 18px;
-    }
-    .owner-dashboard .edit-amenities-options {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+    .owner-dashboard .managed-property:has(.edit-property-form) { padding: 22px 18px; }
+    .owner-dashboard .edit-amenities-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .owner-profile {
         align-items: flex-start;
         flex-direction: column;
@@ -1068,4 +1172,25 @@ hr {
     }
     .owner-profile-info { width: 100%; }
     .dashboard-logout-button { width: 100%; }
+}
+
+/* small phones */
+@media (max-width: 400px) {
+    .logo-text { font-size: 1.25rem; }
+    .hero-title { font-size: 2rem; }
+    .property-details-content { padding: 16px; }
+    .owner-dashboard {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    .owner-dashboard .edit-property-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .managed-property .dashboard-manage-button, .owner-dashboard .edit-property-actions button {
+        width: 100%;
+        flex: none;
+    }
+    .owner-dashboard .edit-amenities-options { grid-template-columns: minmax(0, 1fr); }
+    .owner-dashboard .edit-property-actions { flex-wrap: wrap; }
 }
