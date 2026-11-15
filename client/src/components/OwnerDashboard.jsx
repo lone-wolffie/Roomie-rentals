@@ -89,13 +89,23 @@ function OwnerDashboard() {
                 </div>
             </div>
 
-            <button 
-                type="button"
-                className="dashboard-logout-button"
-                onClick={handleLogout}
-            >
-                Logout
-            </button>
+            <div className="owner-profile-actions">
+                <button
+                    type="button"
+                    className="dashboard-home-button"
+                    onClick={() => navigate("/")}
+                >
+                    Home
+                </button>
+
+                <button
+                    type="button"
+                    className="dashboard-logout-button"
+                    onClick={handleLogout}
+                >
+                    Logout
+                </button>
+            </div>
         </section>
     );
 

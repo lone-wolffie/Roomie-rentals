@@ -938,6 +938,25 @@ hr {
     font-size: 14px;
 }
 
+.owner-profile-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dashboard-home-button {
+    padding: 10px 20px;
+    background: var(--green);
+    color: white;
+    border: 1px solid var(--green);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.dashboard-home-button:hover { background: var(--green-dark); }
+
 .dashboard-logout-button {
     padding: 10px 20px;
     background: white;
@@ -1164,6 +1183,8 @@ hr {
         padding: 18px;
     }
     .owner-profile-info { width: 100%; }
+    .owner-profile-actions { width: 100%; }
+    .owner-profile-actions button { flex: 1; }
     .dashboard-logout-button { width: 100%; }
 }
 
