@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../App.css";
 
 function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const navigate = useNavigate();
 
     const closeMenu = () => {
         setIsMenuOpen(false);
@@ -11,6 +12,29 @@ function Navbar() {
 
     const toggleMenu = () => {
         setIsMenuOpen((previous) => !previous);
+    };
+
+    const handleAdminClick = () => {
+        closeMenu();
+
+        const savedUser = localStorage.getItem("user");
+
+        if (!savedUser) {
+            navigate("/login");
+            return;
+        }
+
+        try {
+            const user = JSON.parse(savedUser);
+
+            if (user) {
+                navigate("/owner-dashboard");
+            } else {
+                navigate("/login");
+            }
+        } catch (error) {
+            navigate("/login");
+        }
     };
 
     return (
@@ -28,9 +52,13 @@ function Navbar() {
                     <a href="#listings">Browse</a>
                     <Link to="/post-house">Post a House</Link>
 
-                    <Link to="/login" className="admin-btn">
+                    <button 
+                        type="button" 
+                        className="admin-btn" 
+                        onClick={handleAdminClick}
+                    >
                         Admin
-                    </Link>
+                    </button>
                 </div>
 
                 <button 
@@ -54,7 +82,10 @@ function Navbar() {
                     Post a House
                 </Link>
 
-                <Link to="/login" onClick={closeMenu}>
+                <Link
+                    to={localStorage.getItem("user") ? "/owner-dashboard" : "/login"}
+                    onClick={closeMenu}
+                >
                     Admin
                 </Link>
             </div>
